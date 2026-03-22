@@ -9,7 +9,6 @@ import {
 } from "@/lib/hackathon-tabs";
 import { cn } from "@/lib/utils/cn";
 
-/** sticky 네비 높이와 섹션 scroll-margin 정렬용 */
 const SCROLL_OFFSET_PX = 112;
 
 function scrollToSection(id: HackathonSectionId) {
@@ -30,11 +29,20 @@ function getActiveSectionId(): HackathonSectionId {
   return current;
 }
 
+export type HackathonSectionNavLayout = "vertical" | "horizontal" | "bottom";
+
+export interface HackathonSectionNavProps {
+  layout?: HackathonSectionNavLayout;
+  className?: string;
+}
+
 /**
- * 단일 스크롤 문서용 앵커 내비: 클릭 시 해당 섹션으로 부드럽게 스크롤,
- * 스크롤 시 현재 구역을 하단 강조선으로 표시합니다.
+ * 해커톤 상세 앵커 내비 — 데스크톱: 왼쪽 타임라인, 모바일: 하단 고정( bottom ).
  */
-export function HackathonSectionNav() {
+export function HackathonSectionNav({
+  layout = "vertical",
+  className,
+}: HackathonSectionNavProps) {
   const [active, setActive] = useState<HackathonSectionId>("overview");
 
   const syncActiveFromScroll = useCallback(() => {
@@ -70,35 +78,96 @@ export function HackathonSectionNav() {
     return () => window.removeEventListener("hashchange", onHash);
   }, []);
 
-  return (
-    <div className="ds-sticky-tabs -mx-1 px-1">
-      <nav
-        className="flex gap-1 overflow-x-auto pb-0"
-        aria-label={hackathonUiAria.sectionNav}
-      >
-        {HACKATHON_SECTION_IDS.map((id) => {
-          const isActive = active === id;
-          return (
-            <a
-              key={id}
-              href={`#${id}`}
-              aria-current={isActive ? "location" : undefined}
-              data-state={isActive ? "active" : "inactive"}
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection(id);
-                setActive(id);
-              }}
-              className={cn(
-                "ds-tab shrink-0 whitespace-nowrap",
-                !isActive && "border-b-transparent",
-              )}
-            >
+  const activeIndex = HACKATHON_SECTION_IDS.indexOf(active);
+
+  const linkClass = (
+    id: HackathonSectionId,
+    isActive: boolean,
+    done: boolean,
+  ) => {
+    if (layout === "horizontal") {
+      return cn(
+        "ds-tab shrink-0 whitespace-nowrap",
+        !isActive && "border-b-transparent",
+      );
+    }
+    if (layout === "bottom") {
+      return cn(
+        "platform-section-nav__pill shrink-0 whitespace-nowrap",
+        isActive && "platform-section-nav__pill--active",
+        done && !isActive && "platform-section-nav__pill--done",
+      );
+    }
+    return cn(
+      "platform-section-nav__link",
+      isActive && "platform-section-nav__link--active",
+      done && !isActive && "platform-section-nav__link--done",
+    );
+  };
+
+  const navInner = (
+    <>
+      {HACKATHON_SECTION_IDS.map((id, index) => {
+        const isActive = active === id;
+        const done = index < activeIndex;
+        return (
+          <a
+            key={id}
+            href={`#${id}`}
+            aria-current={isActive ? "location" : undefined}
+            data-state={isActive ? "active" : done ? "done" : "upcoming"}
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection(id);
+              setActive(id);
+            }}
+            className={linkClass(id, isActive, done)}
+          >
+            {layout === "vertical" && (
+              <span className="platform-section-nav__dot" aria-hidden />
+            )}
+            <span className={layout === "vertical" ? "min-w-0 flex-1" : undefined}>
               {HACKATHON_TAB_LABELS[id]}
-            </a>
-          );
-        })}
-      </nav>
-    </div>
+            </span>
+          </a>
+        );
+      })}
+    </>
+  );
+
+  if (layout === "horizontal") {
+    return (
+      <div className={cn("ds-sticky-tabs -mx-1 px-1", className)}>
+        <nav
+          className="flex gap-1 overflow-x-auto pb-0"
+          aria-label={hackathonUiAria.sectionNav}
+        >
+          {navInner}
+        </nav>
+      </div>
+    );
+  }
+
+  if (layout === "bottom") {
+    return (
+      <div className={cn("platform-section-nav--bottom", className)}>
+        <nav
+          className="platform-section-nav__bottom-bar"
+          aria-label={hackathonUiAria.sectionNav}
+        >
+          {navInner}
+        </nav>
+      </div>
+    );
+  }
+
+  return (
+    <nav
+      className={cn("platform-section-nav", className)}
+      aria-label={hackathonUiAria.sectionNav}
+    >
+      <p className="platform-section-nav__label">Sections</p>
+      <div className="platform-section-nav__track">{navInner}</div>
+    </nav>
   );
 }

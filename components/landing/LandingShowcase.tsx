@@ -5,11 +5,15 @@ import type { Swiper as SwiperType } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import { ScrollReveal } from "@/components/motion/ScrollReveal";
+import { useTheme } from "@/components/providers/ThemeProvider";
 import { landingCopy } from "@/lib/content/landing";
+import { cn } from "@/lib/utils/cn";
 
 import "swiper/css";
 
 export function LandingShowcase() {
+  const { theme } = useTheme();
+  const isLight = theme === "light";
   const { showcase } = landingCopy;
   const uid = useId();
   const swiperRef = useRef<SwiperType | null>(null);
@@ -53,7 +57,7 @@ export function LandingShowcase() {
               id={`${uid}-showcase-title`}
               className="font-mono text-[10px] uppercase tracking-[0.2em] text-faint"
             >
-              Demo slides
+              {showcase.carouselLabel}
             </span>
             <div className="ds-swiper-nav">
               <button
@@ -113,7 +117,12 @@ export function LandingShowcase() {
                     {s.tags.map((tag) => (
                       <li
                         key={tag}
-                        className="rounded-sm border border-blue/30 bg-blue-deep/40 px-2.5 py-1 font-mono text-[11px] text-neon/90"
+                        className={cn(
+                          "rounded-sm border px-2.5 py-1 font-mono text-[11px]",
+                          isLight
+                            ? "border-blue/20 bg-blue/[0.08] text-blue"
+                            : "border-blue/30 bg-blue-deep/40 text-neon/90",
+                        )}
                       >
                         {tag}
                       </li>

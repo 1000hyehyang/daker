@@ -5,6 +5,8 @@ import { useCallback, useEffect } from "react";
 import Link from "next/link";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { HackathonSectionNav } from "@/components/hackathon/HackathonSectionNav";
+import { HackathonStatusBadge } from "@/components/hackathon/HackathonStatusBadge";
+import { ShareHackathonButton } from "@/components/hackathon/ShareHackathonButton";
 import { ScrollReveal } from "@/components/motion/ScrollReveal";
 import { LeaderboardTable } from "@/components/leaderboard/LeaderboardTable";
 import { ScoreBreakdown } from "@/components/leaderboard/ScoreBreakdown";
@@ -12,11 +14,11 @@ import { SubmitForm } from "@/components/submit/SubmitForm";
 import { TeamCreateForm } from "@/components/team/TeamCreateForm";
 import { TeamList } from "@/components/team/TeamList";
 import {
+  hackathonDetailHeroCopy,
   hackathonDetailMetaCopy,
   hackathonDetailSectionCopy,
 } from "@/lib/content/detailSections";
 import {
-  HACKATHON_STATUS_LABEL,
   HACKATHON_TAB_LABELS,
   SUBMISSION_SUMMARY_LABEL,
 } from "@/lib/content/hackathon";
@@ -32,6 +34,10 @@ import {
 import { computeFinalScore, deriveScoreBreakdown } from "@/lib/score";
 import type { Hackathon, HackathonDetail } from "@/lib/types/models";
 import { formatDateShort } from "@/lib/utils/format";
+
+function sumPrizeKRW(items: { amountKRW: number }[]) {
+  return items.reduce((sum, p) => sum + p.amountKRW, 0);
+}
 
 export interface HackathonDetailViewProps {
   hackathon: Hackathon;
@@ -51,17 +57,15 @@ function SectionBlock({
     <ScrollReveal
       as="section"
       id={id}
-      className="scroll-mt-28 border-t border-border pt-14 first:border-t-0 first:pt-12"
+      className="scroll-mt-28 border-t border-border/80 pb-16 pt-20 first:border-t-0 first:pb-12 first:pt-14"
     >
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-        <h2 className="text-title tracking-tight text-foreground">{title}</h2>
+        <h2 className="hack-section-title">{title}</h2>
         <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
           #{id}
         </span>
       </div>
-      <div className="mt-8 space-y-4 text-sm leading-relaxed text-muted">
-        {children}
-      </div>
+      <div className="hack-section-body">{children}</div>
     </ScrollReveal>
   );
 }
@@ -151,80 +155,164 @@ export function HackathonDetailView({
     window.history.replaceState(null, "", "#teams");
   };
 
+  const prizeSum = sumPrizeKRW(sections.prize.items);
+
   return (
-    <div className="mt-10">
-      <ScrollReveal
-        as="header"
-        className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between lg:gap-12"
-        start="top 93%"
-        y={12}
-        duration={0.5}
-      >
-        <div className="max-w-measure flex-1">
-          <p className="eyebrow">{HACKATHON_STATUS_LABEL[hackathon.status]}</p>
-          <h1 className="mt-3 text-display text-foreground lg:max-w-[20ch]">
-            {hackathon.title}
-          </h1>
-          <p className="mt-4 text-sm text-muted">
-            {hackathonDetailMetaCopy.deadlineLabel}{" "}
-            {formatDateShort(hackathon.period.submissionDeadlineAt)}{" "}
-            {hackathonDetailMetaCopy.metaSep} {hackathonDetailMetaCopy.endLabel}{" "}
-            {formatDateShort(hackathon.period.endAt)}
-          </p>
-          <p className="mt-6 text-xs leading-relaxed text-faint">
-            {hackathon.tags.join(" · ")}
-          </p>
+    <>
+    <div className="mt-6 pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))] lg:mt-10 lg:flex lg:gap-10 lg:pb-0">
+      <aside className="mb-8 hidden shrink-0 lg:mb-0 lg:block lg:w-52">
+        <div className="sticky top-28">
+          <HackathonSectionNav layout="vertical" />
         </div>
+      </aside>
 
-        <dl className="ds-panel ds-panel--inset w-full shrink-0 space-y-0 p-4 text-sm lg:w-72">
-          <div className="border-b border-border pb-4">
-            <dt className="text-faint">{hackathonDetailMetaCopy.myTeamDt}</dt>
-            <dd className="mt-2 font-mono text-foreground">
-              {myTeamCode ?? hackathonDetailMetaCopy.emptyCode}
-              {myTeamCode && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    leave();
-                    reloadSubmission();
-                  }}
-                  className="btn-ghost ml-3 p-0 text-xs font-sans text-muted"
-                >
-                  {hackathonDetailMetaCopy.leaveTeam}
-                </button>
+      <div className="min-w-0 flex-1">
+        <ScrollReveal
+          as="header"
+          className="hack-detail-hero pb-8 pt-2 sm:pb-10 sm:pt-4"
+          start="top 93%"
+          y={12}
+          duration={0.5}
+        >
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between lg:gap-10">
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <HackathonStatusBadge status={hackathon.status} />
+                <ShareHackathonButton />
+              </div>
+              <h1 className="mt-5 text-display text-foreground lg:max-w-[20ch]">
+                {hackathon.title}
+              </h1>
+              {hackathon.organizer && (
+                <p className="mt-3 text-xs font-medium text-faint">
+                  주최{" "}
+                  <span className="text-muted">{hackathon.organizer}</span>
+                </p>
               )}
-            </dd>
-          </div>
-          <div className="pt-4">
-            <dt className="text-faint">{hackathonDetailMetaCopy.submitDt}</dt>
-            <dd className="mt-2 font-medium text-foreground">
-              {submission?.status === "submitted"
-                ? SUBMISSION_SUMMARY_LABEL.submitted
-                : submission?.status === "draft"
-                  ? SUBMISSION_SUMMARY_LABEL.draft
-                  : SUBMISSION_SUMMARY_LABEL.none}
-            </dd>
-          </div>
-        </dl>
-      </ScrollReveal>
+              <p className="mt-4 max-w-measure text-sm leading-relaxed text-muted">
+                {sections.overview.summary}
+              </p>
+              <div className="mt-5 flex flex-wrap gap-2">
+                {hackathon.tags.map((tag) => (
+                  <span key={tag} className="team-tag">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
 
-      <div className="mt-12">
-        <HackathonSectionNav />
-      </div>
+            <dl className="hack-sticky-meta w-full shrink-0 space-y-0 py-1 pl-4 text-sm sm:pl-5 lg:sticky lg:top-28 lg:z-10 lg:w-[min(100%,19rem)] lg:self-start">
+              <div className="border-b border-border pb-4">
+                <dt className="text-[11px] font-semibold uppercase tracking-[0.12em] text-faint">
+                  {hackathonDetailMetaCopy.myTeamDt}
+                </dt>
+                <dd className="mt-2 font-mono text-sm text-foreground">
+                  {myTeamCode ?? hackathonDetailMetaCopy.emptyCode}
+                  {myTeamCode && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        leave();
+                        reloadSubmission();
+                      }}
+                      className="btn-ghost ml-3 p-0 text-xs font-sans text-muted"
+                    >
+                      {hackathonDetailMetaCopy.leaveTeam}
+                    </button>
+                  )}
+                </dd>
+              </div>
+              <div className="pt-4">
+                <dt className="text-[11px] font-semibold uppercase tracking-[0.12em] text-faint">
+                  {hackathonDetailMetaCopy.submitDt}
+                </dt>
+                <dd className="mt-2 font-semibold text-foreground">
+                  {submission?.status === "submitted"
+                    ? SUBMISSION_SUMMARY_LABEL.submitted
+                    : submission?.status === "draft"
+                      ? SUBMISSION_SUMMARY_LABEL.draft
+                      : SUBMISSION_SUMMARY_LABEL.none}
+                </dd>
+              </div>
+              {sections.teams.campEnabled && (
+                <div className="border-t border-border pt-4">
+                  <Link
+                    href={`/camp?hackathon=${encodeURIComponent(slug)}`}
+                    className="btn-secondary flex w-full justify-center text-center text-sm"
+                  >
+                    {hackathonDetailMetaCopy.campCta}
+                  </Link>
+                </div>
+              )}
+            </dl>
+          </div>
 
-      <div className="mt-10 space-y-0">
+          <div className="hack-stat-row">
+            <div className="hack-stat-item">
+              <p className="hack-stat-item__label">
+                {hackathonDetailMetaCopy.deadlineLabel}
+              </p>
+              <p className="hack-stat-item__value font-mono">
+                {formatDateShort(hackathon.period.submissionDeadlineAt)}
+              </p>
+            </div>
+            <div className="hack-stat-item">
+              <p className="hack-stat-item__label">
+                {hackathonDetailMetaCopy.endLabel}
+              </p>
+              <p className="hack-stat-item__value font-mono">
+                {formatDateShort(hackathon.period.endAt)}
+              </p>
+            </div>
+            {sections.prize.items.length > 0 && (
+              <div className="hack-stat-item">
+                <p className="hack-stat-item__label">
+                  {hackathonDetailHeroCopy.statPrize}
+                </p>
+                <p className="hack-stat-item__value">
+                  <span className="font-mono tabular-nums">
+                    {prizeSum.toLocaleString("ko-KR")}
+                  </span>
+                  <span className="ml-1 text-sm font-medium text-muted">원</span>
+                </p>
+              </div>
+            )}
+            {hackathon.stats?.participantCount != null && (
+              <div className="hack-stat-item">
+                <p className="hack-stat-item__label">
+                  {hackathonDetailHeroCopy.statParticipants}
+                </p>
+                <p className="hack-stat-item__value font-mono">
+                  {hackathon.stats.participantCount.toLocaleString("ko-KR")}
+                </p>
+              </div>
+            )}
+            {hackathon.stats?.viewCount != null && (
+              <div className="hack-stat-item">
+                <p className="hack-stat-item__label">
+                  {hackathonDetailHeroCopy.statViews}
+                </p>
+                <p className="hack-stat-item__value font-mono">
+                  {hackathon.stats.viewCount.toLocaleString("ko-KR")}
+                </p>
+              </div>
+            )}
+          </div>
+        </ScrollReveal>
+
+        <div className="space-y-0">
         <SectionBlock id="overview" title={HACKATHON_TAB_LABELS.overview}>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="ds-panel ds-panel--accent-notch">
+          <div className="grid gap-10 sm:grid-cols-2">
+            <div>
               <p className="eyebrow">개요</p>
               <p className="mt-3 text-base leading-relaxed text-foreground">
                 {sections.overview.summary}
               </p>
             </div>
-            <div className="ds-panel ds-panel--inset">
+            <div className="border-t border-border/70 pt-8 sm:border-l sm:border-t-0 sm:pl-10 sm:pt-0">
               <p className="eyebrow">{hackathonDetailSectionCopy.teamPolicyTitle}</p>
               <dl className="mt-4 space-y-0 text-sm">
-                <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-border py-3 first:pt-0">
+                <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-border/80 py-3 first:pt-0">
                   <dt className="text-faint">
                     {hackathonDetailSectionCopy.soloLinePrefix}
                   </dt>
@@ -238,8 +326,10 @@ export function HackathonDetailView({
                   <dt className="text-faint">
                     {hackathonDetailSectionCopy.maxMembersPrefix}
                   </dt>
-                  <dd className="font-mono tabular-nums text-foreground">
-                    {sections.overview.teamPolicy.maxTeamSize}
+                  <dd className="font-semibold text-foreground">
+                    <span className="tabular-nums">
+                      {sections.overview.teamPolicy.maxTeamSize}
+                    </span>
                     {hackathonDetailSectionCopy.maxMembersSuffix}
                   </dd>
                 </div>
@@ -249,7 +339,8 @@ export function HackathonDetailView({
         </SectionBlock>
 
         <SectionBlock id="info" title={HACKATHON_TAB_LABELS.info}>
-          <ul className="list-inside list-disc space-y-2 text-muted">
+          <div className="space-y-10">
+          <ul className="list-inside list-disc space-y-3 text-muted">
             {sections.info.notice.map((n) => (
               <li key={n}>{n}</li>
             ))}
@@ -258,7 +349,7 @@ export function HackathonDetailView({
             <p className="text-xs font-semibold uppercase tracking-wide text-faint">
               {hackathonDetailSectionCopy.linksHeading}
             </p>
-            <ul className="mt-3 space-y-2">
+            <ul className="mt-4 space-y-2">
               {Object.entries(sections.info.links).map(([key, url]) => (
                 <li key={key}>
                   <a href={url} target="_blank" rel="noreferrer" className="link">
@@ -268,63 +359,77 @@ export function HackathonDetailView({
               ))}
             </ul>
           </div>
+          </div>
         </SectionBlock>
 
         <SectionBlock id="evaluation" title={HACKATHON_TAB_LABELS.evaluation}>
-          <p>
-            <span className="font-medium text-foreground">
-              {sections.eval.metricName}
-            </span>{" "}
-            — {sections.eval.description}
-          </p>
-          {sections.eval.limits && (
-            <ul className="text-muted">
-              {Object.entries(sections.eval.limits).map(([k, v]) => (
-                <li key={k}>
-                  {k}: {v}
-                </li>
-              ))}
-            </ul>
-          )}
-          {sections.eval.scoreDisplay ? (
-            <div className="border-l-2 border-border pl-4">
-              <p className="font-medium text-foreground">
-                {sections.eval.scoreDisplay.label}
+          <div className="hack-eval">
+            <div className="hack-eval__lead">
+              <p className="text-base leading-relaxed text-foreground">
+                <span className="font-semibold">{sections.eval.metricName}</span>
+                <span className="text-muted"> — {sections.eval.description}</span>
               </p>
-              <ul className="mt-2 space-y-1">
-                {sections.eval.scoreDisplay.breakdown.map((b) => (
-                  <li key={b.key}>
-                    {b.label}: {b.weightPercent}% ({b.key})
+            </div>
+            {sections.eval.limits && (
+              <ul className="hack-eval__limits">
+                {Object.entries(sections.eval.limits).map(([k, v]) => (
+                  <li key={k}>
+                    <span className="text-faint">{k}</span>
+                    <span className="mx-2 text-border">·</span>
+                    <span className="font-mono tabular-nums text-foreground">
+                      {v}
+                    </span>
                   </li>
                 ))}
               </ul>
-              <p className="mt-3 text-xs text-faint">
-                {hackathonDetailSectionCopy.evalPrdNote}
+            )}
+            {sections.eval.scoreDisplay ? (
+              <div className="hack-eval__breakdown">
+                <p className="font-semibold text-foreground">
+                  {sections.eval.scoreDisplay.label}
+                </p>
+                <ul className="mt-3 space-y-2">
+                  {sections.eval.scoreDisplay.breakdown.map((b) => (
+                    <li
+                      key={b.key}
+                      className="flex flex-wrap items-baseline justify-between gap-2 border-b border-border/70 py-3 last:border-b-0"
+                    >
+                      <span className="text-muted">{b.label}</span>
+                      <span className="font-mono text-sm tabular-nums text-foreground">
+                        {b.weightPercent}%{" "}
+                        <span className="text-faint">({b.key})</span>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-6 text-xs leading-relaxed text-faint">
+                  {hackathonDetailSectionCopy.evalPrdNote}
+                </p>
+              </div>
+            ) : (
+              <p className="text-faint">
+                {hackathonDetailSectionCopy.evalFallback}
               </p>
-            </div>
-          ) : (
-            <p className="text-faint">
-              {hackathonDetailSectionCopy.evalFallback}
-            </p>
-          )}
+            )}
+          </div>
         </SectionBlock>
 
         <SectionBlock id="schedule" title={HACKATHON_TAB_LABELS.schedule}>
-          <p className="text-faint">
+          <p className="text-xs font-semibold uppercase tracking-wide text-faint">
             {hackathonDetailSectionCopy.timezonePrefix}{" "}
-            {sections.schedule.timezone}
+            <span className="text-muted">{sections.schedule.timezone}</span>
           </p>
-          <ol className="relative mt-4 border-l border-border pl-5">
+          <div className="hack-timeline">
             {sections.schedule.milestones.map((m) => (
-              <li key={m.at + m.name} className="mb-8 last:mb-0">
-                <span className="absolute -left-[3px] top-1.5 h-[7px] w-[7px] rounded-full bg-foreground" />
-                <p className="font-medium text-foreground">{m.name}</p>
-                <p className="mt-1 text-faint">
+              <div key={m.at + m.name} className="hack-timeline__item">
+                <span className="hack-timeline__dot" aria-hidden />
+                <p className="font-semibold text-foreground">{m.name}</p>
+                <p className="mt-1.5 font-mono text-xs text-faint">
                   {formatDateShort(m.at)} · {m.at}
                 </p>
-              </li>
+              </div>
             ))}
-          </ol>
+          </div>
         </SectionBlock>
 
         <SectionBlock id="prize" title={HACKATHON_TAB_LABELS.prize}>
@@ -333,15 +438,20 @@ export function HackathonDetailView({
               {hackathonDetailSectionCopy.prizeEmpty}
             </p>
           ) : (
-            <table className="w-full text-left text-sm">
-              <tbody className="divide-y divide-border border-y border-border">
+            <table className="hack-prize-table">
+              <tbody>
                 {sections.prize.items.map((p) => (
                   <tr key={p.place}>
-                    <th className="py-3 pr-6 font-medium text-foreground">
+                    <th scope="row" className="align-middle text-foreground">
                       {p.place}
                     </th>
-                    <td className="py-3 tabular-nums text-muted">
-                      {p.amountKRW.toLocaleString("ko-KR")}원
+                    <td className="text-right">
+                      <span className="hack-prize-amount">
+                        {p.amountKRW.toLocaleString("ko-KR")}
+                        <span className="ml-1 text-sm font-medium text-muted">
+                          원
+                        </span>
+                      </span>
                     </td>
                   </tr>
                 ))}
@@ -353,11 +463,11 @@ export function HackathonDetailView({
         <ScrollReveal
           as="section"
           id="teams"
-          className="scroll-mt-28 border-t border-border pt-14"
+          className="scroll-mt-28 border-t border-border/80 pb-16 pt-20"
         >
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
-              <h2 className="text-title tracking-tight text-foreground">
+              <h2 className="hack-section-title">
                 {HACKATHON_TAB_LABELS.teams}
               </h2>
               <p className="mt-3 max-w-measure text-sm leading-relaxed text-muted">
@@ -374,7 +484,7 @@ export function HackathonDetailView({
             )}
           </div>
 
-          <div className="mt-8 space-y-6">
+          <div className="mt-10 space-y-8">
             {teamsLoading && (
               <p className="text-sm text-muted">
                 {hackathonDetailSectionCopy.teamsLoading}
@@ -419,16 +529,18 @@ export function HackathonDetailView({
               </p>
             </div>
           ) : (
-            <SubmitForm
-              hackathonSlug={slug}
-              teamCode={myTeamCode}
-              guideLines={sections.submit.guide}
-              submission={submission}
-              onUpdated={refreshSubmission}
-            />
+            <div className="form-panel">
+              <SubmitForm
+                hackathonSlug={slug}
+                teamCode={myTeamCode}
+                guideLines={sections.submit.guide}
+                submission={submission}
+                onUpdated={refreshSubmission}
+              />
+            </div>
           )}
           {demoBreakdown && (
-            <div className="border-l-2 border-border pl-4 text-muted">
+            <div className="mt-8 border-l-2 border-border pl-4 text-muted">
               <p className="text-xs font-semibold uppercase tracking-wide text-faint">
                 {hackathonDetailSectionCopy.scorePreviewTitle}
               </p>
@@ -445,7 +557,7 @@ export function HackathonDetailView({
         </SectionBlock>
 
         <SectionBlock id="leaderboard" title={HACKATHON_TAB_LABELS.leaderboard}>
-          <p className="text-faint">{sections.leaderboard.note}</p>
+          <p className="mb-6 text-faint leading-relaxed">{sections.leaderboard.note}</p>
           {lbLoading && (
             <p className="text-muted">
               {hackathonDetailSectionCopy.leaderboardLoading}
@@ -458,7 +570,14 @@ export function HackathonDetailView({
             />
           )}
         </SectionBlock>
+        </div>
       </div>
     </div>
+
+    <HackathonSectionNav
+      layout="bottom"
+      className="fixed bottom-0 left-0 right-0 z-[var(--z-sticky)] lg:hidden"
+    />
+    </>
   );
 }

@@ -3,7 +3,7 @@ export const homeCopy = {
   headlineLine1: "해커톤을",
   headlineLine2: "한 곳에서",
   description:
-    "목록·상세·팀·제출·랭킹을 브라우저 저장소만으로 구동하는 데모입니다. 외부 API 없이 흐름을 끝까지 검증할 수 있습니다.",
+    "해커톤을 찾고, 팀에 참여하고, 제출·랭킹까지 이어지는 흐름을 DAKER에서 진행할 수 있습니다.",
   navEyebrow: "시작하기",
   navAriaLabel: "주요 이동",
   links: {
@@ -17,7 +17,7 @@ export const homeCopy = {
     },
     rankings: {
       title: "랭킹",
-      desc: "저장된 리더보드 합산",
+      desc: "해커톤별 리더보드 확인",
     },
   },
 } as const;

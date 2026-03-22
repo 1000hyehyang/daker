@@ -1,4 +1,4 @@
-/** 팀 생성 폼 — 플레이스홀더·검증·섹션 안내 (데모용 고정 문구) */
+/** 팀 생성 폼 — 플레이스홀더·검증·섹션 안내 */
 export const teamFormCopy = {
   pageEyebrow: "새 팀",
   pageTitle: "팀 등록",

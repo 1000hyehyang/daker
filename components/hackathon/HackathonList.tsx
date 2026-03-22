@@ -35,10 +35,15 @@ export function HackathonList({ hackathons, totalCount }: HackathonListProps) {
   }
 
   return (
-    <div className="border-t border-border">
+    <ul
+      className="grid w-full grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 sm:gap-y-14 lg:grid-cols-3 lg:gap-x-10 lg:gap-y-16"
+      role="list"
+    >
       {hackathons.map((h) => (
-        <HackathonCard key={h.slug} hackathon={h} />
+        <li key={h.slug} className="flex min-w-0">
+          <HackathonCard hackathon={h} />
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }

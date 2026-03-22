@@ -70,7 +70,7 @@ export function CampPageClient() {
       <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_min(100%,320px)] lg:items-start">
         <ScrollReveal
           as="div"
-          className="ds-panel ds-panel--accent-notch"
+          className="border-b border-border/60 pb-8"
           start="top 90%"
         >
           <p className="eyebrow">Camp</p>
@@ -80,10 +80,11 @@ export function CampPageClient() {
 
         <ScrollReveal
           as="div"
-          className="ds-panel ds-panel--inset"
+          className="hack-sticky-meta py-1 pl-4 sm:pl-5 lg:sticky lg:top-24"
           start="top 90%"
           delay={0.04}
         >
+          <p className="eyebrow mb-1">Filter</p>
           <label className="block text-sm" htmlFor={hackathonFilterId}>
             <span className="text-faint">{campPageCopy.filterLabel}</span>
             <Select
@@ -105,7 +106,7 @@ export function CampPageClient() {
 
       {filterSlug !== "all" && (
         <ScrollReveal as="div" className="mt-10 max-w-measure" start="top 90%">
-          <dl className="ds-panel ds-panel--inset">
+          <dl className="border-b border-border/60 pb-6">
             <div>
               <dt className="text-faint">{campPageCopy.myTeamDt}</dt>
               <dd className="mt-2 font-mono text-sm text-foreground">

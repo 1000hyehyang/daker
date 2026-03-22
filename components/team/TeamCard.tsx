@@ -30,9 +30,13 @@ export function TeamCard({
         <span className="font-medium text-muted">{team.memberCount}</span>명
       </span>
       {team.lookingFor.length > 0 && (
-        <span className="max-w-full">
-          {teamCardCopy.metaLookingForPrefix}{" "}
-          <span className="text-muted">{team.lookingFor.join(", ")}</span>
+        <span className="flex max-w-full flex-wrap items-center gap-1.5">
+          <span className="text-faint">{teamCardCopy.metaLookingForPrefix}</span>
+          {team.lookingFor.map((role) => (
+            <span key={role} className="team-tag">
+              {role}
+            </span>
+          ))}
         </span>
       )}
       <a
@@ -105,7 +109,7 @@ export function TeamCard({
               onJoin();
             }
           }}
-          className="team-row-shell-interactive group flex flex-col gap-4 p-4 sm:flex-row sm:items-stretch sm:gap-6"
+          className="team-card-enhanced team-row-shell-interactive group flex flex-col gap-4 p-4 sm:flex-row sm:items-stretch sm:gap-6"
           whileHover={{ y: -1 }}
           whileTap={{ scale: 0.996 }}
           transition={{ type: "spring", stiffness: 520, damping: 36 }}
@@ -117,7 +121,7 @@ export function TeamCard({
   }
 
   return (
-    <article className="team-row-shell overflow-hidden">
+    <article className="team-card-enhanced team-row-shell overflow-hidden">
       <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-stretch sm:gap-6">
         {body}
       </div>

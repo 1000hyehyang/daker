@@ -44,10 +44,21 @@ export const hackathonUiAria = {
   statusFilter: "해커톤 상태 필터",
 } as const;
 
+/** 목록 카드 CTA·메타 라벨 */
+export const hackathonCardCopy = {
+  organizerFallback: "주최 미정",
+  prizeShort: "상금",
+  participantsShort: "참가",
+  viewsShort: "조회",
+  ctaView: "상세 보기",
+  ctaJoin: "참여하기",
+  ctaEnded: "결과 보기",
+} as const;
+
 export const hackathonListCopy = {
   emptyAllTitle: "등록된 해커톤이 없습니다",
   emptyAllHint:
-    "localStorage가 비어 있거나 손상된 경우입니다. 페이지를 새로고침하거나 브라우저 저장소를 초기화해 보세요.",
+    "등록된 해커톤을 불러오지 못했습니다. 잠시 후 다시 시도하거나 페이지를 새로고침해 주세요.",
   emptyFilterTitle: "필터 결과가 없습니다",
   emptyFilterHint: "다른 상태를 선택해 보세요.",
 } as const;

@@ -60,7 +60,7 @@ export default function RankingsPage() {
 
       <ScrollReveal
         as="div"
-        className="ds-panel ds-panel--accent-notch mt-8"
+        className="mt-8 border-b border-border/60 pb-8"
         start="top 90%"
       >
         <p className="eyebrow">Rankings</p>
@@ -105,17 +105,17 @@ export default function RankingsPage() {
             <ScrollReveal
               as="section"
               key={r.hackathonSlug}
-              className="ds-panel overflow-hidden p-0"
+              className="overflow-hidden border-b border-border/60 pb-10"
               start="top 90%"
               delay={Math.min(i, 4) * 0.03}
             >
-              <div className="flex flex-col gap-2 border-b border-border px-4 py-4 sm:flex-row sm:items-end sm:justify-between">
+              <div className="flex flex-col gap-2 py-4 sm:flex-row sm:items-end sm:justify-between">
                 <h2 className="text-title text-foreground">{r.title}</h2>
                 <span className="font-mono text-xs text-faint">
                   {r.hackathonSlug}
                 </span>
               </div>
-              <div className="p-4 pt-2">
+              <div className="pt-1">
                 <LeaderboardTable
                   embedded
                   entries={r.leaderboard.entries}

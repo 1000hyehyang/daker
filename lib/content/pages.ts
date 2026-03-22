@@ -7,8 +7,14 @@ export const uiActionsCopy = {
 export const hackathonsPageCopy = {
   back: "← 홈",
   title: "해커톤",
-  description: "상태로 좁혀 보고, 행 전체를 눌러 상세로 이동합니다.",
+  description:
+    "상태별로 모아 보고, 카드를 눌러 상세 안내와 일정·팀·제출을 확인할 수 있습니다.",
 } as const;
+
+/** 목록 상단 통계 한 줄 (전체 N · 표시 M) */
+export function hackathonsPageStatsLine(total: number, shown: number) {
+  return `전체 ${total}개 · 표시 ${shown}개`;
+}
 
 export const hackathonDetailPageCopy = {
   back: "← 해커톤 목록",
@@ -32,7 +38,7 @@ export const rankingsPageCopy = {
   back: "← 홈",
   title: "랭킹",
   description:
-    "저장소에 기록된 리더보드를 해커톤별로 나열합니다. 점수와 breakdown을 한눈에 봅니다.",
+    "제출·집계된 결과를 바탕으로 한 리더보드를 해커톤별로 확인합니다. 점수와 세부 항목을 한눈에 볼 수 있습니다.",
   loadError: "랭킹 데이터를 불러오지 못했습니다.",
   emptyTitle: "표시할 점수가 없습니다",
   emptyHint: "해커톤 상세에서 제출을 완료하면 여기에 반영됩니다.",

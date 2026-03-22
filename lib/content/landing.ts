@@ -1,5 +1,5 @@
 /**
- * DAKER 해커톤 랜딩 — 이벤트/프로덕트 페이지용 카피 (포트폴리오 구조 아님)
+ * DAKER 해커톤 랜딩 — 서비스 소개·안내 카피
  */
 export const landingCopy = {
   meta: {
@@ -17,7 +17,7 @@ export const landingCopy = {
     eyebrow: "Overview",
     title: "무엇을 만드나요?",
     lead:
-      "DAKER는 외부 API 없이 동작하는 해커톤 플로우 데모입니다. 목록·상세·팀·제출·리더보드를 localStorage로 연결해, 실제 행사 전에 흐름을 끝까지 검증할 수 있습니다.",
+      "DAKER는 해커톤 모집부터 상세 안내, 팀 구성, 제출, 리더보드까지 한 흐름으로 이어지는 플랫폼입니다. 행사 운영에 맞춰 규칙·일정·콘텐츠를 구성할 수 있습니다.",
     columns: [
       {
         title: "대상",
@@ -25,11 +25,11 @@ export const landingCopy = {
       },
       {
         title: "목표",
-        body: "기획서·프로토타입·제출 규칙에 맞춘 아티팩트를 제출하고, 투명한 스코어로 순위를 확인합니다.",
+        body: "기획서·프로토타입·제출 규칙에 맞춘 아티팩트를 제출하고, 공개된 기준에 따라 순위를 확인합니다.",
       },
       {
         title: "방식",
-        body: "브라우저 저장소 기반 데모이므로, 설치 없이 링크만으로 참여·리허설이 가능합니다.",
+        body: "별도 설치 없이 웹 브라우저에서 참여·리허설이 가능합니다.",
       },
     ],
   },
@@ -40,7 +40,7 @@ export const landingCopy = {
     items: [
       {
         title: "엔드투엔드 플로우",
-        desc: "모집 → 팀 → 제출 → 랭킹까지 단일 UI에서 연습할 수 있습니다.",
+        desc: "모집 → 팀 → 제출 → 랭킹까지 단일 화면에서 진행할 수 있습니다.",
       },
       {
         title: "상태가 보이는 제출",
@@ -52,7 +52,7 @@ export const landingCopy = {
       },
       {
         title: "빠른 리허설",
-        desc: "데이터가 로컬에만 있어 반복 테스트에 적합합니다.",
+        desc: "같은 화면에서 반복 연습하고 점검하기에 적합합니다.",
       },
     ],
   },
@@ -69,7 +69,7 @@ export const landingCopy = {
       },
       {
         name: "Engineering",
-        desc: "안정적인 빌드, 에지 케이스, 제출 가능한 데모 품질.",
+        desc: "안정적인 빌드, 에지 케이스, 제출 가능한 완성도.",
         tag: "DEV",
       },
       {
@@ -83,7 +83,7 @@ export const landingCopy = {
     id: "schedule",
     eyebrow: "Timeline",
     title: "일정",
-    timezone: "KST 기준 · 예시 타임라인",
+    timezone: "KST 기준 · 예시 일정",
     milestones: [
       { date: "D-14", label: "참가 신청 · 팀 매칭 오픈", detail: "캠프에서 팀 생성·합류" },
       { date: "D-7", label: "킥오프 & 규칙 공지", detail: "제출 가이드·채점 기준 고정" },
@@ -96,12 +96,13 @@ export const landingCopy = {
     id: "showcase",
     eyebrow: "Showcase",
     title: "프로젝트 예시",
-    subtitle: "과거 해커톤에서 나올 법한 결과물 유형입니다. (데모용 예시)",
+    subtitle: "해커톤에서 다룰 수 있는 결과물 유형을 예시로 정리했습니다.",
+    carouselLabel: "슬라이드",
     slides: [
       {
         title: "실시간 협업 보드",
-        desc: "WebSocket 대신 로컬 시뮬레이션으로 UX 검증.",
-        tags: ["React", "CRDT", "Demo"],
+        desc: "협업 화면과 편집 흐름을 설계·검토한 사례입니다.",
+        tags: ["React", "CRDT", "Prototype"],
       },
       {
         title: "스코어 대시보드",
@@ -110,7 +111,7 @@ export const landingCopy = {
       },
       {
         title: "제출 파이프라인",
-        desc: "초안 저장 → 최종 잠금까지 상태 머신 UI.",
+        desc: "초안 저장 → 최종 잠금까지 상태를 단계별로 관리하는 UI.",
         tags: ["State machine", "Forms"],
       },
       {
@@ -124,37 +125,39 @@ export const landingCopy = {
     id: "faq",
     eyebrow: "FAQ",
     title: "자주 묻는 질문",
-    subtitle: "답은 기본적으로 펼쳐 두었습니다. 추가 문의는 행사 운영 채널을 이용해 주세요.",
+    subtitle:
+      "질문을 눌러 답을 펼칠 수 있습니다. 추가 문의는 행사 운영 채널을 이용해 주세요.",
     items: [
       {
-        q: "실제 대회와 동일한가요?",
-        a: "이 저장소는 플로우 검증용 데모입니다. 규칙·일정은 콘텐츠로 교체할 수 있습니다.",
+        q: "실제 대회 규칙과 동일한가요?",
+        a: "화면에 표시되는 규칙·일정·상금은 주최 측이 등록한 내용을 따릅니다. 행사마다 다를 수 있으니 상세 페이지의 공지를 확인해 주세요.",
       },
       {
         q: "데이터는 어디에 저장되나요?",
-        a: "브라우저 localStorage입니다. 기기·브라우저마다 다릅니다.",
+        a: "브라우저에 저장됩니다. 사용 중인 기기·브라우저마다 데이터가 분리될 수 있습니다.",
       },
       {
         q: "팀은 몇 명까지인가요?",
-        a: "해커톤 상세의 팀 정책을 따릅니다. 데모 데이터에서 조정 가능합니다.",
+        a: "각 해커톤 상세에 안내된 팀 정책(최대 인원 등)을 따릅니다.",
       },
       {
         q: "제출 후 수정할 수 있나요?",
-        a: "데모에서는 최종 제출 후 잠금 상태를 보여 줄 수 있습니다.",
+        a: "행사 규정에 따라 초안 저장 후 최종 제출 시점에 잠길 수 있습니다. 해당 해커톤의 제출 안내를 확인해 주세요.",
       },
     ],
   },
   cta: {
     id: "cta",
     eyebrow: "Join",
-    title: "지금 플로우를 경험해 보세요",
-    body: "목록에서 해커톤을 고르고, 캠프에서 팀을 만들거나 참여한 뒤 제출·랭킹까지 이동해 보세요.",
+    title: "지금 해커톤을 시작해 보세요",
+    body: "목록에서 해커톤을 고르고, 캠프에서 팀을 만들거나 참여한 뒤 제출·랭킹까지 이어 보세요.",
     primary: "해커톤 목록",
     secondary: "팀 캠프 열기",
   },
   footer: {
     product: "DAKER Hackathon Platform",
-    note: "Local demo · No external API",
+    note: "해커톤 모집·팀 빌딩·제출·랭킹을 한 곳에서",
+    copyrightTagline: "해커톤 플랫폼",
     links: [
       { href: "/hackathons", label: "해커톤" },
       { href: "/camp", label: "캠프" },

@@ -6,7 +6,7 @@ export function computeFinalScore(breakdown: ScoreBreakdown): number {
 }
 
 /**
- * 심사 입력 없이도 데모 일관 점수를 만들기 위한 결정론적 breakdown.
+ * 심사 입력이 없을 때도 일관된 점수를 만들기 위한 결정론적 breakdown.
  * (teamCode + hackathonSlug) 기준으로 동일 팀은 동일 점수.
  */
 export function deriveScoreBreakdown(

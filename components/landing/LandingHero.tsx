@@ -5,9 +5,13 @@ import Link from "next/link";
 import gsap from "gsap";
 import { motion } from "framer-motion";
 
+import { useTheme } from "@/components/providers/ThemeProvider";
 import { landingCopy } from "@/lib/content/landing";
+import { cn } from "@/lib/utils/cn";
 
 export function LandingHero() {
+  const { theme } = useTheme();
+  const isLight = theme === "light";
   const root = useRef<HTMLElement | null>(null);
 
   useLayoutEffect(() => {
@@ -55,7 +59,12 @@ export function LandingHero() {
           </span>
           <span
             data-hero-line
-            className="mt-1 block bg-gradient-to-r from-neon via-accent to-blue bg-clip-text text-transparent"
+            className={cn(
+              "mt-1 block",
+              isLight
+                ? "text-foreground"
+                : "bg-gradient-to-r from-neon via-accent to-blue bg-clip-text text-transparent",
+            )}
           >
             {landingCopy.meta.titleLine2}
           </span>

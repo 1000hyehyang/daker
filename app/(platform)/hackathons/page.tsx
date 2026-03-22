@@ -5,7 +5,11 @@ import { ScrollReveal } from "@/components/motion/ScrollReveal";
 import { HackathonList } from "@/components/hackathon/HackathonList";
 import { HackathonListSkeleton } from "@/components/hackathon/HackathonListSkeleton";
 import { HackathonStatusFilter } from "@/components/hackathon/HackathonStatusFilter";
-import { hackathonsPageCopy, uiActionsCopy } from "@/lib/content/pages";
+import {
+  hackathonsPageCopy,
+  hackathonsPageStatsLine,
+  uiActionsCopy,
+} from "@/lib/content/pages";
 import { useHackathons } from "@/hooks/useHackathons";
 
 export default function HackathonsPage() {
@@ -23,25 +27,35 @@ export default function HackathonsPage() {
     <main className="flex flex-1 flex-col">
       <ScrollReveal
         as="header"
-        className="ds-panel ds-panel--accent-notch max-w-measure"
+        className="max-w-measure border-b border-border/30 pb-10"
         start="top 92%"
       >
         <Link href="/" className="link-subtle text-sm">
           {hackathonsPageCopy.back}
         </Link>
-        <p className="eyebrow mt-6">Hackathons</p>
-        <h1 className="mt-3 text-display text-foreground">
+        <p className="mt-8 text-xs font-medium tracking-wide text-muted">
+          Hackathons
+        </p>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
           {hackathonsPageCopy.title}
         </h1>
-        <p className="mt-4 text-muted">{hackathonsPageCopy.description}</p>
+        <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-muted">
+          {hackathonsPageCopy.description}
+        </p>
       </ScrollReveal>
 
-      <section className="mt-12 space-y-8" aria-live="polite">
+      <section className="mt-14 space-y-10" aria-live="polite">
         <HackathonStatusFilter
           value={statusFilter}
           onChange={setStatusFilter}
           disabled={loading || Boolean(error)}
         />
+
+        {!loading && !error && (
+          <p className="text-[13px] text-muted">
+            {hackathonsPageStatsLine(items.length, filtered.length)}
+          </p>
+        )}
 
         {loading && <HackathonListSkeleton />}
 

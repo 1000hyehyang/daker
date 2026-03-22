@@ -30,7 +30,7 @@ export function SiteFooter() {
         </nav>
       </div>
       <p className="mx-auto mt-10 max-w-content px-5 text-center text-[11px] text-faint sm:px-8 lg:px-12">
-        © {new Date().getFullYear()} DAKER. Demo hackathon platform.
+        © {new Date().getFullYear()} DAKER · {footer.copyrightTagline}
       </p>
     </footer>
   );

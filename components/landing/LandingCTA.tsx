@@ -4,9 +4,13 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 
 import { ScrollReveal } from "@/components/motion/ScrollReveal";
+import { useTheme } from "@/components/providers/ThemeProvider";
 import { landingCopy } from "@/lib/content/landing";
+import { cn } from "@/lib/utils/cn";
 
 export function LandingCTA() {
+  const { theme } = useTheme();
+  const isLight = theme === "light";
   const { cta } = landingCopy;
 
   return (
@@ -17,15 +21,26 @@ export function LandingCTA() {
       start="top 86%"
     >
       <div className="mx-auto max-w-content px-5 sm:px-8 lg:px-12">
-        <div className="relative overflow-hidden rounded-sm border border-border bg-gradient-to-br from-blue-deep/50 via-surface to-surface p-8 sm:p-12">
-          <div
-            className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-neon/10 blur-3xl"
-            aria-hidden
-          />
-          <div
-            className="pointer-events-none absolute -bottom-20 left-1/3 h-40 w-40 rounded-full bg-blue/15 blur-3xl"
-            aria-hidden
-          />
+        <div
+          className={cn(
+            "relative overflow-hidden rounded-sm border border-border p-8 sm:p-12",
+            isLight
+              ? "bg-surface"
+              : "bg-gradient-to-br from-blue-deep/50 via-surface to-surface",
+          )}
+        >
+          {!isLight && (
+            <>
+              <div
+                className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-neon/10 blur-3xl"
+                aria-hidden
+              />
+              <div
+                className="pointer-events-none absolute -bottom-20 left-1/3 h-40 w-40 rounded-full bg-blue/15 blur-3xl"
+                aria-hidden
+              />
+            </>
+          )}
 
           <p className="eyebrow text-neon">{cta.eyebrow}</p>
           <h2 className="relative mt-3 max-w-xl text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">

@@ -1,4 +1,4 @@
-/** UI·데모용 고정 문구 — 컴포넌트에 하드코딩하지 않고 여기서 관리 */
+/** UI 고정 문구 — 컴포넌트에 하드코딩하지 않고 여기서 관리 */
 export * from "@/lib/content/detailSections";
 export * from "@/lib/content/hackathon";
 export * from "@/lib/content/home";

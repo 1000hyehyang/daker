@@ -8,7 +8,7 @@ export const hackathonDetailSectionCopy = {
   maxMembersSuffix: "명",
   linksHeading: "링크",
   evalFallback: "가중치는 공지 원문을 참고하세요.",
-  evalPrdNote: "최종: 참가자×0.3 + 심사×0.7 (PRD)",
+  evalPrdNote: "최종: 참가자×0.3 + 심사×0.7 (공지 기준)",
   timezonePrefix: "타임존",
   prizeEmpty: "공개된 상금 정보가 없습니다.",
   teamsLoading: "팀 목록을 불러오는 중…",
@@ -19,6 +19,15 @@ export const hackathonDetailSectionCopy = {
   scorePreviewFormula: "최종",
   scorePreviewSuffix: "(가중 합산)",
   leaderboardLoading: "불러오는 중…",
+} as const;
+
+export const hackathonDetailHeroCopy = {
+  share: "링크 복사",
+  shareDone: "복사됨",
+  shareFail: "복사 실패",
+  statPrize: "총 상금",
+  statParticipants: "참가",
+  statViews: "조회",
 } as const;
 
 export const hackathonDetailMetaCopy = {

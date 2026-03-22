@@ -32,6 +32,8 @@ const config: Config = {
         neon: "hsl(var(--neon) / <alpha-value>)",
         blue: "hsl(var(--blue) / <alpha-value>)",
         "blue-deep": "hsl(var(--blue-deep) / <alpha-value>)",
+        /** LIVE / 진행 — 네온 그린 */
+        "accent-green": "hsl(var(--accent-green) / <alpha-value>)",
       },
       fontFamily: {
         sans: ["var(--font-sans)"],

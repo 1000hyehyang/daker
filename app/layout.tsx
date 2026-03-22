@@ -7,9 +7,9 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { RootProviders } from "@/components/providers/RootProviders";
 
 export const metadata: Metadata = {
-  title: "DAKER Hackathon — Developer Hackathon Platform",
+  title: "DAKER — 해커톤 모집·팀·제출·랭킹",
   description:
-    "다크 모드 해커톤 랜딩. 목록·팀·제출·랭킹 플로우를 브라우저에서 검증하는 데모 플랫폼.",
+    "해커톤 상세 안내, 팀 빌딩, 제출, 리더보드를 한 플랫폼에서. DAKER로 행사 운영과 참가자 경험을 연결합니다.",
 };
 
 export default function RootLayout({

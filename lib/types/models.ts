@@ -13,6 +13,14 @@ export interface HackathonLinks {
   faq?: string;
 }
 
+/** 목록 카드용 선택 통계 */
+export interface HackathonListStats {
+  /** 총 상금 합(원) — 상세 prize와 별개로 요약 표시용 */
+  prizeTotalKRW?: number;
+  participantCount?: number;
+  viewCount?: number;
+}
+
 /** 목록 API / localStorage hackathons 항목 */
 export interface Hackathon {
   slug: string;
@@ -22,6 +30,9 @@ export interface Hackathon {
   thumbnailUrl?: string;
   period: HackathonPeriod;
   links: HackathonLinks;
+  /** 주최/운영 표기 (DACON 스타일 목록) */
+  organizer?: string;
+  stats?: HackathonListStats;
 }
 
 export interface TeamContact {
