@@ -167,16 +167,16 @@ export function HackathonDetailView({
       </aside>
 
       <div className="min-w-0 flex-1">
-        <ScrollReveal
-          as="header"
-          className="hack-detail-hero pb-8 pt-2 sm:pb-10 sm:pt-4"
-          start="top 93%"
-          y={12}
-          duration={0.5}
-        >
+        <header className="hack-detail-hero pb-8 pt-2 sm:pb-10 sm:pt-4">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between lg:gap-10">
-            <div className="min-w-0 flex-1">
-              <div className="flex flex-wrap items-start justify-between gap-4">
+            <ScrollReveal
+              as="div"
+              className="min-w-0 flex-1"
+              start="top 93%"
+              y={12}
+              duration={0.5}
+            >
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <HackathonStatusBadge status={hackathon.status} />
                 <ShareHackathonButton />
               </div>
@@ -199,7 +199,7 @@ export function HackathonDetailView({
                   </span>
                 ))}
               </div>
-            </div>
+            </ScrollReveal>
 
             <dl className="hack-sticky-meta w-full shrink-0 space-y-0 py-1 pl-4 text-sm sm:pl-5 lg:sticky lg:top-28 lg:z-10 lg:w-[min(100%,19rem)] lg:self-start">
               <div className="border-b border-border pb-4">
@@ -222,7 +222,7 @@ export function HackathonDetailView({
                   )}
                 </dd>
               </div>
-              <div className="pt-4">
+              <div className="pb-4 pt-4">
                 <dt className="text-[11px] font-semibold uppercase tracking-[0.12em] text-faint">
                   {hackathonDetailMetaCopy.submitDt}
                 </dt>
@@ -247,58 +247,65 @@ export function HackathonDetailView({
             </dl>
           </div>
 
-          <div className="hack-stat-row">
-            <div className="hack-stat-item">
-              <p className="hack-stat-item__label">
-                {hackathonDetailMetaCopy.deadlineLabel}
-              </p>
-              <p className="hack-stat-item__value font-mono">
-                {formatDateShort(hackathon.period.submissionDeadlineAt)}
-              </p>
-            </div>
-            <div className="hack-stat-item">
-              <p className="hack-stat-item__label">
-                {hackathonDetailMetaCopy.endLabel}
-              </p>
-              <p className="hack-stat-item__value font-mono">
-                {formatDateShort(hackathon.period.endAt)}
-              </p>
-            </div>
-            {sections.prize.items.length > 0 && (
+          <ScrollReveal
+            as="div"
+            start="top 93%"
+            y={12}
+            duration={0.5}
+          >
+            <div className="hack-stat-row">
               <div className="hack-stat-item">
                 <p className="hack-stat-item__label">
-                  {hackathonDetailHeroCopy.statPrize}
-                </p>
-                <p className="hack-stat-item__value">
-                  <span className="font-mono tabular-nums">
-                    {prizeSum.toLocaleString("ko-KR")}
-                  </span>
-                  <span className="ml-1 text-sm font-medium text-muted">원</span>
-                </p>
-              </div>
-            )}
-            {hackathon.stats?.participantCount != null && (
-              <div className="hack-stat-item">
-                <p className="hack-stat-item__label">
-                  {hackathonDetailHeroCopy.statParticipants}
+                  {hackathonDetailMetaCopy.deadlineLabel}
                 </p>
                 <p className="hack-stat-item__value font-mono">
-                  {hackathon.stats.participantCount.toLocaleString("ko-KR")}
+                  {formatDateShort(hackathon.period.submissionDeadlineAt)}
                 </p>
               </div>
-            )}
-            {hackathon.stats?.viewCount != null && (
               <div className="hack-stat-item">
                 <p className="hack-stat-item__label">
-                  {hackathonDetailHeroCopy.statViews}
+                  {hackathonDetailMetaCopy.endLabel}
                 </p>
                 <p className="hack-stat-item__value font-mono">
-                  {hackathon.stats.viewCount.toLocaleString("ko-KR")}
+                  {formatDateShort(hackathon.period.endAt)}
                 </p>
               </div>
-            )}
-          </div>
-        </ScrollReveal>
+              {sections.prize.items.length > 0 && (
+                <div className="hack-stat-item">
+                  <p className="hack-stat-item__label">
+                    {hackathonDetailHeroCopy.statPrize}
+                  </p>
+                  <p className="hack-stat-item__value">
+                    <span className="font-mono tabular-nums">
+                      {prizeSum.toLocaleString("ko-KR")}
+                    </span>
+                    <span className="ml-1 text-sm font-medium text-muted">원</span>
+                  </p>
+                </div>
+              )}
+              {hackathon.stats?.participantCount != null && (
+                <div className="hack-stat-item">
+                  <p className="hack-stat-item__label">
+                    {hackathonDetailHeroCopy.statParticipants}
+                  </p>
+                  <p className="hack-stat-item__value font-mono">
+                    {hackathon.stats.participantCount.toLocaleString("ko-KR")}
+                  </p>
+                </div>
+              )}
+              {hackathon.stats?.viewCount != null && (
+                <div className="hack-stat-item">
+                  <p className="hack-stat-item__label">
+                    {hackathonDetailHeroCopy.statViews}
+                  </p>
+                  <p className="hack-stat-item__value font-mono">
+                    {hackathon.stats.viewCount.toLocaleString("ko-KR")}
+                  </p>
+                </div>
+              )}
+            </div>
+          </ScrollReveal>
+        </header>
 
         <div className="space-y-0">
         <SectionBlock id="overview" title={HACKATHON_TAB_LABELS.overview}>
