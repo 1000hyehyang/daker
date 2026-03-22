@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useId, useState } from "react";
+import { ScrollReveal } from "@/components/motion/ScrollReveal";
 import { TeamCreateForm } from "@/components/team/TeamCreateForm";
 import { TeamList } from "@/components/team/TeamList";
 import { Select } from "@/components/ui/Select";
@@ -65,49 +66,66 @@ export function CampPageClient() {
       <Link href="/" className="link-subtle text-sm">
         {campPageCopy.back}
       </Link>
-      <h1 className="mt-8 text-display">{campPageCopy.title}</h1>
-      <p className="mt-4 max-w-measure text-muted">{campPageCopy.description}</p>
 
-      <div className="mt-12 max-w-md">
-        <label className="block text-sm" htmlFor={hackathonFilterId}>
-          <span className="text-faint">{campPageCopy.filterLabel}</span>
-          <Select
-            id={hackathonFilterId}
-            className="mt-1.5"
-            value={filterSlug}
-            onChange={onHackathonChange}
-            options={[
-              { value: "all", label: campPageCopy.filterAllOption },
-              ...hackathons.map((h) => ({
-                value: h.slug,
-                label: h.title,
-              })),
-            ]}
-          />
-        </label>
+      <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_min(100%,320px)] lg:items-start">
+        <ScrollReveal
+          as="div"
+          className="ds-panel ds-panel--accent-notch"
+          start="top 90%"
+        >
+          <p className="eyebrow">Camp</p>
+          <h1 className="mt-3 text-display text-foreground">{campPageCopy.title}</h1>
+          <p className="mt-4 max-w-measure text-muted">{campPageCopy.description}</p>
+        </ScrollReveal>
+
+        <ScrollReveal
+          as="div"
+          className="ds-panel ds-panel--inset"
+          start="top 90%"
+          delay={0.04}
+        >
+          <label className="block text-sm" htmlFor={hackathonFilterId}>
+            <span className="text-faint">{campPageCopy.filterLabel}</span>
+            <Select
+              id={hackathonFilterId}
+              className="mt-2"
+              value={filterSlug}
+              onChange={onHackathonChange}
+              options={[
+                { value: "all", label: campPageCopy.filterAllOption },
+                ...hackathons.map((h) => ({
+                  value: h.slug,
+                  label: h.title,
+                })),
+              ]}
+            />
+          </label>
+        </ScrollReveal>
       </div>
 
       {filterSlug !== "all" && (
-        <dl className="mt-10 grid max-w-measure gap-6 border-t border-border pt-10 sm:grid-cols-2">
-          <div>
-            <dt className="text-faint">{campPageCopy.myTeamDt}</dt>
-            <dd className="mt-1 font-mono text-sm text-foreground">
-              {myTeamCode ?? campPageCopy.emptyCode}
-              {myTeamCode && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    leave();
-                    reloadAll();
-                  }}
-                  className="btn-ghost ml-3 p-0 text-xs font-sans"
-                >
-                  {campPageCopy.leaveParticipation}
-                </button>
-              )}
-            </dd>
-          </div>
-        </dl>
+        <ScrollReveal as="div" className="mt-10 max-w-measure" start="top 90%">
+          <dl className="ds-panel ds-panel--inset">
+            <div>
+              <dt className="text-faint">{campPageCopy.myTeamDt}</dt>
+              <dd className="mt-2 font-mono text-sm text-foreground">
+                {myTeamCode ?? campPageCopy.emptyCode}
+                {myTeamCode && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      leave();
+                      reloadAll();
+                    }}
+                    className="btn-ghost ml-3 p-0 text-xs font-sans"
+                  >
+                    {campPageCopy.leaveParticipation}
+                  </button>
+                )}
+              </dd>
+            </div>
+          </dl>
+        </ScrollReveal>
       )}
 
       <div className="mt-12">

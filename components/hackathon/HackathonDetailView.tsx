@@ -3,7 +3,9 @@
 import type { ReactNode } from "react";
 import { useCallback, useEffect } from "react";
 import Link from "next/link";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { HackathonSectionNav } from "@/components/hackathon/HackathonSectionNav";
+import { ScrollReveal } from "@/components/motion/ScrollReveal";
 import { LeaderboardTable } from "@/components/leaderboard/LeaderboardTable";
 import { ScoreBreakdown } from "@/components/leaderboard/ScoreBreakdown";
 import { SubmitForm } from "@/components/submit/SubmitForm";
@@ -46,15 +48,21 @@ function SectionBlock({
   children: ReactNode;
 }) {
   return (
-    <section
+    <ScrollReveal
+      as="section"
       id={id}
       className="scroll-mt-28 border-t border-border pt-14 first:border-t-0 first:pt-12"
     >
-      <h2 className="text-title tracking-tight text-foreground">{title}</h2>
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <h2 className="text-title tracking-tight text-foreground">{title}</h2>
+        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+          #{id}
+        </span>
+      </div>
       <div className="mt-8 space-y-4 text-sm leading-relaxed text-muted">
         {children}
       </div>
-    </section>
+    </ScrollReveal>
   );
 }
 
@@ -73,8 +81,22 @@ export function HackathonDetailView({
         document
           .getElementById(raw)
           ?.scrollIntoView({ behavior: "smooth", block: "start" });
+        ScrollTrigger.refresh();
       });
     });
+  }, []);
+
+  useEffect(() => {
+    let t: ReturnType<typeof setTimeout>;
+    const onResize = () => {
+      clearTimeout(t);
+      t = setTimeout(() => ScrollTrigger.refresh(), 120);
+    };
+    window.addEventListener("resize", onResize);
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener("resize", onResize);
+    };
   }, []);
 
   const {
@@ -131,7 +153,13 @@ export function HackathonDetailView({
 
   return (
     <div className="mt-10">
-      <header className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between lg:gap-12">
+      <ScrollReveal
+        as="header"
+        className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between lg:gap-12"
+        start="top 93%"
+        y={12}
+        duration={0.5}
+      >
         <div className="max-w-measure flex-1">
           <p className="eyebrow">{HACKATHON_STATUS_LABEL[hackathon.status]}</p>
           <h1 className="mt-3 text-display text-foreground lg:max-w-[20ch]">
@@ -148,10 +176,10 @@ export function HackathonDetailView({
           </p>
         </div>
 
-        <dl className="w-full shrink-0 space-y-4 border-t border-border pt-6 text-sm lg:w-64 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
-          <div>
+        <dl className="ds-panel ds-panel--inset w-full shrink-0 space-y-0 p-4 text-sm lg:w-72">
+          <div className="border-b border-border pb-4">
             <dt className="text-faint">{hackathonDetailMetaCopy.myTeamDt}</dt>
-            <dd className="mt-1 font-mono text-foreground">
+            <dd className="mt-2 font-mono text-foreground">
               {myTeamCode ?? hackathonDetailMetaCopy.emptyCode}
               {myTeamCode && (
                 <button
@@ -167,9 +195,9 @@ export function HackathonDetailView({
               )}
             </dd>
           </div>
-          <div>
+          <div className="pt-4">
             <dt className="text-faint">{hackathonDetailMetaCopy.submitDt}</dt>
-            <dd className="mt-1 text-foreground">
+            <dd className="mt-2 font-medium text-foreground">
               {submission?.status === "submitted"
                 ? SUBMISSION_SUMMARY_LABEL.submitted
                 : submission?.status === "draft"
@@ -178,7 +206,7 @@ export function HackathonDetailView({
             </dd>
           </div>
         </dl>
-      </header>
+      </ScrollReveal>
 
       <div className="mt-12">
         <HackathonSectionNav />
@@ -186,24 +214,37 @@ export function HackathonDetailView({
 
       <div className="mt-10 space-y-0">
         <SectionBlock id="overview" title={HACKATHON_TAB_LABELS.overview}>
-          <p className="text-base text-foreground">{sections.overview.summary}</p>
-          <div className="border-l-2 border-border pl-4 text-muted">
-            <p className="text-xs font-semibold uppercase tracking-wide text-faint">
-              {hackathonDetailSectionCopy.teamPolicyTitle}
-            </p>
-            <ul className="mt-3 list-inside list-disc space-y-1">
-              <li>
-                {hackathonDetailSectionCopy.soloLinePrefix}{" "}
-                {sections.overview.teamPolicy.allowSolo
-                  ? hackathonDetailSectionCopy.soloYes
-                  : hackathonDetailSectionCopy.soloNo}
-              </li>
-              <li>
-                {hackathonDetailSectionCopy.maxMembersPrefix}{" "}
-                {sections.overview.teamPolicy.maxTeamSize}
-                {hackathonDetailSectionCopy.maxMembersSuffix}
-              </li>
-            </ul>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="ds-panel ds-panel--accent-notch">
+              <p className="eyebrow">개요</p>
+              <p className="mt-3 text-base leading-relaxed text-foreground">
+                {sections.overview.summary}
+              </p>
+            </div>
+            <div className="ds-panel ds-panel--inset">
+              <p className="eyebrow">{hackathonDetailSectionCopy.teamPolicyTitle}</p>
+              <dl className="mt-4 space-y-0 text-sm">
+                <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-border py-3 first:pt-0">
+                  <dt className="text-faint">
+                    {hackathonDetailSectionCopy.soloLinePrefix}
+                  </dt>
+                  <dd className="font-semibold text-foreground">
+                    {sections.overview.teamPolicy.allowSolo
+                      ? hackathonDetailSectionCopy.soloYes
+                      : hackathonDetailSectionCopy.soloNo}
+                  </dd>
+                </div>
+                <div className="flex flex-wrap items-baseline justify-between gap-3 py-3">
+                  <dt className="text-faint">
+                    {hackathonDetailSectionCopy.maxMembersPrefix}
+                  </dt>
+                  <dd className="font-mono tabular-nums text-foreground">
+                    {sections.overview.teamPolicy.maxTeamSize}
+                    {hackathonDetailSectionCopy.maxMembersSuffix}
+                  </dd>
+                </div>
+              </dl>
+            </div>
           </div>
         </SectionBlock>
 
@@ -309,7 +350,8 @@ export function HackathonDetailView({
           )}
         </SectionBlock>
 
-        <section
+        <ScrollReveal
+          as="section"
           id="teams"
           className="scroll-mt-28 border-t border-border pt-14"
         >
@@ -359,7 +401,7 @@ export function HackathonDetailView({
               onCreated={(teamCode) => refreshAfterTeam(teamCode)}
             />
           </div>
-        </section>
+        </ScrollReveal>
 
         <SectionBlock id="submit" title={HACKATHON_TAB_LABELS.submit}>
           {!myTeamCode ? (

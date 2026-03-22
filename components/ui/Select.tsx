@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils/cn";
 
 export interface SelectOption {
@@ -51,7 +52,7 @@ function ChevronIcon({ open }: { open: boolean }) {
   );
 }
 
-/** 네이티브 select 대신 트리거 버튼 + 드롭다운 패널. */
+/** 커스텀 트리거 + HUD형 드롭다운 패널 */
 export function Select({
   value,
   onChange,
@@ -114,10 +115,9 @@ export function Select({
           }
         }}
         className={cn(
-          "form-control-base flex h-11 w-full cursor-pointer items-center justify-between gap-2 py-0 text-left leading-5",
-          "hover:border-border-strong active:bg-muted-bg/40",
-          "disabled:cursor-not-allowed",
-          open && "border-accent ring-2 ring-ring/30",
+          "ds-field flex h-11 w-full cursor-pointer items-center justify-between gap-2 py-0 text-left leading-5",
+          "hover:border-border-strong active:translate-y-px",
+          open && "border-accent ring-2 ring-ring/35 ring-offset-2 ring-offset-background",
           triggerClassName,
         )}
       >
@@ -125,42 +125,39 @@ export function Select({
         <ChevronIcon open={open} />
       </button>
 
-      {open && (
-        <ul
-          id={listId}
-          role="listbox"
-          aria-labelledby={buttonId}
-          className={cn(
-            "absolute left-0 right-0 z-50 mt-1 max-h-60 overflow-auto rounded-md border border-border bg-elevated py-1 shadow-md",
-          )}
-        >
-          {options.map((opt) => {
-            const isSelected = opt.value === value;
-            const isDisabled = opt.disabled;
-            return (
-              <li key={opt.value} role="presentation">
-                <button
-                  type="button"
-                  role="option"
-                  aria-selected={isSelected}
-                  disabled={isDisabled}
-                  onClick={() => !isDisabled && pick(opt.value)}
-                  className={cn(
-                    "flex w-full cursor-pointer items-center px-3 py-2.5 text-left text-sm text-foreground transition",
-                    "hover:bg-muted-bg/80",
-                    "focus-visible:bg-muted-bg/80 focus-visible:outline-none",
-                    "active:bg-muted-bg",
-                    "disabled:cursor-not-allowed disabled:opacity-50",
-                    isSelected && "bg-accent-muted/80 font-medium text-accent",
-                  )}
-                >
-                  {opt.label}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      )}
+      <AnimatePresence>
+        {open && (
+          <motion.ul
+            id={listId}
+            role="listbox"
+            aria-labelledby={buttonId}
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.16, ease: [0.22, 1, 0.36, 1] }}
+            className={cn("ds-select-panel absolute left-0 right-0 top-full")}
+          >
+            {options.map((opt) => {
+              const isSelected = opt.value === value;
+              const isDisabled = opt.disabled;
+              return (
+                <li key={opt.value} role="presentation">
+                  <button
+                    type="button"
+                    role="option"
+                    aria-selected={isSelected}
+                    disabled={isDisabled}
+                    onClick={() => !isDisabled && pick(opt.value)}
+                    className={cn("ds-select-option", isSelected && "bg-accent-muted/90")}
+                  >
+                    {opt.label}
+                  </button>
+                </li>
+              );
+            })}
+          </motion.ul>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "framer-motion";
 import { teamCardCopy, teamRecruitmentBadge } from "@/lib/content/team";
 import type { Team } from "@/lib/types/models";
 
@@ -9,8 +12,7 @@ export interface TeamCardProps {
 }
 
 /**
- * 카드/목록 하이브리드: 한 블록 안에 제목(강) → 소개(약) → 메타(더 약) 계층.
- * 참여 가능 시 행 전체가 클릭 영역이며, 연락 링크는 전파 차단.
+ * 인벤토리 슬롯형 카드 — 참여 시 전체 행이 눌리는 HUD 인터랙션.
  */
 export function TeamCard({
   team,
@@ -92,7 +94,7 @@ export function TeamCard({
   if (canJoin && onJoin) {
     return (
       <article className="outline-none">
-        <div
+        <motion.div
           role="button"
           tabIndex={0}
           aria-label={`${team.name}${teamCardCopy.joinAriaLabelSuffix}`}
@@ -104,9 +106,12 @@ export function TeamCard({
             }
           }}
           className="team-row-shell-interactive group flex flex-col gap-4 p-4 sm:flex-row sm:items-stretch sm:gap-6"
+          whileHover={{ y: -1 }}
+          whileTap={{ scale: 0.996 }}
+          transition={{ type: "spring", stiffness: 520, damping: 36 }}
         >
           {body}
-        </div>
+        </motion.div>
       </article>
     );
   }

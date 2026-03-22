@@ -10,6 +10,8 @@ const config: Config = {
       colors: {
         background: "hsl(var(--background) / <alpha-value>)",
         foreground: "hsl(var(--foreground) / <alpha-value>)",
+        surface: "hsl(var(--surface) / <alpha-value>)",
+        "surface-2": "hsl(var(--surface-2) / <alpha-value>)",
         muted: "hsl(var(--muted) / <alpha-value>)",
         "muted-bg": "hsl(var(--muted-bg) / <alpha-value>)",
         faint: "hsl(var(--faint) / <alpha-value>)",
@@ -21,9 +23,15 @@ const config: Config = {
         "accent-muted": "hsl(var(--accent-muted) / <alpha-value>)",
         danger: "hsl(var(--danger) / <alpha-value>)",
         "danger-bg": "hsl(var(--danger-bg) / <alpha-value>)",
+        success: "hsl(var(--success) / <alpha-value>)",
+        "success-bg": "hsl(var(--success-bg) / <alpha-value>)",
         ring: "hsl(var(--ring) / <alpha-value>)",
-        elevated: "#ffffff",
+        elevated: "hsl(var(--surface) / <alpha-value>)",
         ink: "hsl(var(--foreground) / <alpha-value>)",
+        /** 사이버 팔레트 — 액센트 전용 */
+        neon: "hsl(var(--neon) / <alpha-value>)",
+        blue: "hsl(var(--blue) / <alpha-value>)",
+        "blue-deep": "hsl(var(--blue-deep) / <alpha-value>)",
       },
       fontFamily: {
         sans: ["var(--font-sans)"],

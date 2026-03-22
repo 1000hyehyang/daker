@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ScrollReveal } from "@/components/motion/ScrollReveal";
 import { HackathonList } from "@/components/hackathon/HackathonList";
 import { HackathonListSkeleton } from "@/components/hackathon/HackathonListSkeleton";
 import { HackathonStatusFilter } from "@/components/hackathon/HackathonStatusFilter";
@@ -20,13 +21,20 @@ export default function HackathonsPage() {
 
   return (
     <main className="flex flex-1 flex-col">
-      <header className="max-w-measure">
+      <ScrollReveal
+        as="header"
+        className="ds-panel ds-panel--accent-notch max-w-measure"
+        start="top 92%"
+      >
         <Link href="/" className="link-subtle text-sm">
           {hackathonsPageCopy.back}
         </Link>
-        <h1 className="mt-6 text-display">{hackathonsPageCopy.title}</h1>
+        <p className="eyebrow mt-6">Hackathons</p>
+        <h1 className="mt-3 text-display text-foreground">
+          {hackathonsPageCopy.title}
+        </h1>
         <p className="mt-4 text-muted">{hackathonsPageCopy.description}</p>
-      </header>
+      </ScrollReveal>
 
       <section className="mt-12 space-y-8" aria-live="polite">
         <HackathonStatusFilter

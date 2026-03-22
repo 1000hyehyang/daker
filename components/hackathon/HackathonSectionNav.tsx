@@ -71,9 +71,9 @@ export function HackathonSectionNav() {
   }, []);
 
   return (
-    <div className="sticky top-0 z-10 -mx-1 border-b border-border bg-background/90 px-1 pb-0 backdrop-blur-sm">
+    <div className="ds-sticky-tabs -mx-1 px-1">
       <nav
-        className="flex gap-5 overflow-x-auto pb-0 sm:gap-6"
+        className="flex gap-1 overflow-x-auto pb-0"
         aria-label={hackathonUiAria.sectionNav}
       >
         {HACKATHON_SECTION_IDS.map((id) => {
@@ -83,16 +83,15 @@ export function HackathonSectionNav() {
               key={id}
               href={`#${id}`}
               aria-current={isActive ? "location" : undefined}
+              data-state={isActive ? "active" : "inactive"}
               onClick={(e) => {
                 e.preventDefault();
                 scrollToSection(id);
                 setActive(id);
               }}
               className={cn(
-                "shrink-0 border-b-2 pb-3 text-sm font-medium transition",
-                isActive
-                  ? "border-accent text-foreground"
-                  : "border-transparent text-muted hover:border-border-strong hover:text-foreground",
+                "ds-tab shrink-0 whitespace-nowrap",
+                !isActive && "border-b-transparent",
               )}
             >
               {HACKATHON_TAB_LABELS[id]}

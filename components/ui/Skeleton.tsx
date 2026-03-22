@@ -1,4 +1,5 @@
 import type { HTMLAttributes } from "react";
+import { cn } from "@/lib/utils/cn";
 
 export function Skeleton({
   className = "",
@@ -6,7 +7,8 @@ export function Skeleton({
 }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={`animate-pulse rounded-sm bg-muted-bg ${className}`}
+      className={cn("ds-skeleton", className)}
+      role="presentation"
       {...rest}
     />
   );

@@ -1,0 +1,723 @@
+@use "./mixins" as m;
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* SUITE — 가변 웹폰트 (본문 가독성 우선) */
+@font-face {
+  font-family: SUITE;
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url("https://cdn.jsdelivr.net/gh/sunn-us/SUITE@v2.0/fonts/variable/woff2/SUITE-Variable.woff2")
+    format("woff2");
+}
+
+/**
+ * Daker — 다크 임머시브 · 네온 블루 액센트
+ * 전기 블루(#00D4FF 류) → 미드 블루(#3B82F6) → 딥 블루 — 베이스는 블랙/네이비
+ */
+:root {
+  --font-sans: SUITE, "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕",
+    system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", "Segoe UI Mono", Menlo,
+    Consolas, monospace;
+  --font-display: SUITE, var(--font-sans);
+
+  /* 베이스 — 다크 네이비 / 블랙 */
+  --background: 230 24% 5%;
+  --foreground: 210 25% 96%;
+  --surface: 230 28% 9%;
+  --surface-2: 232 26% 7%;
+  --muted: 220 12% 68%;
+  --muted-bg: 230 22% 14%;
+  --faint: 220 10% 48%;
+  --border: 220 22% 22%;
+  --border-strong: 220 28% 38%;
+
+  /* 액센트: 네온 블루 (electric) + 시안 블루 + 미드 블루 */
+  --neon: 198 100% 56%;
+  --accent: 204 95% 53%;
+  --accent-hover: 204 95% 46%;
+  --accent-fg: 230 28% 8%;
+  --accent-muted: 204 42% 14%;
+  --blue: 217 91% 60%;
+  --blue-deep: 224 64% 33%;
+  --ring: 198 100% 56%;
+
+  --danger: 0 72% 55%;
+  --danger-bg: 0 35% 12%;
+  --success: 152 60% 45%;
+  --success-bg: 152 35% 12%;
+
+  --radius-sm: 2px;
+  --radius-md: 4px;
+
+  --motion-fast: 0.12s;
+  --motion-base: 0.2s;
+  --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --z-dropdown: 50;
+  --z-sticky: 60;
+  --z-modal: 100;
+}
+
+/* 라이트 모드 — 동일 토큰 구조, 대비·채도만 조정 */
+html[data-theme="light"] {
+  --background: 220 20% 97%;
+  --foreground: 230 28% 11%;
+  --surface: 0 0% 100%;
+  --surface-2: 220 14% 96%;
+  --muted: 220 8% 36%;
+  --muted-bg: 220 14% 93%;
+  --faint: 220 8% 44%;
+  --border: 220 12% 82%;
+  --border-strong: 220 12% 58%;
+
+  --neon: 212 85% 42%;
+  --accent: 214 80% 38%;
+  --accent-hover: 214 80% 32%;
+  --accent-fg: 0 0% 100%;
+  --accent-muted: 214 35% 92%;
+  --blue: 217 91% 48%;
+  --blue-deep: 224 58% 28%;
+  --ring: 214 80% 38%;
+
+  --danger: 0 72% 44%;
+  --danger-bg: 0 86% 97%;
+  --success: 152 50% 32%;
+  --success-bg: 152 40% 94%;
+}
+
+@layer base {
+  html[data-theme="light"] {
+    color-scheme: light;
+  }
+
+  html[data-theme="dark"] {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply min-h-screen bg-background text-foreground antialiased;
+    font-family: var(--font-sans);
+    font-feature-settings: "kern" 1, "liga" 1;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: hsl(var(--accent-muted) / 1);
+    color: hsl(var(--foreground) / 1);
+  }
+}
+
+@layer components {
+  .link {
+    @apply text-blue underline decoration-border underline-offset-4 transition-colors;
+    transition-duration: var(--motion-base);
+    transition-timing-function: var(--motion-ease);
+  }
+
+  .link:hover {
+    @apply text-neon decoration-neon;
+  }
+
+  .link-subtle {
+    @apply text-muted transition-colors;
+    transition-duration: var(--motion-base);
+  }
+
+  .link-subtle:hover {
+    @apply text-foreground;
+  }
+
+  /* 폼 — 기본 HTML 느낌 제거, HUD 입력 슬롯 */
+  .ds-field {
+    @apply w-full text-sm text-foreground outline-none;
+    border-radius: var(--radius-sm);
+    border: 1px solid hsl(var(--border) / 1);
+    background: hsl(var(--surface) / 1);
+    padding: 10px 12px;
+    line-height: 1.45;
+    min-height: 44px;
+    box-shadow: 0 1px 0 0 rgb(0 0 0 / 0.04);
+    transition:
+      border-color var(--motion-base) var(--motion-ease),
+      box-shadow var(--motion-base) var(--motion-ease),
+      transform var(--motion-fast) var(--motion-ease),
+      background-color var(--motion-base) var(--motion-ease);
+  }
+
+  .ds-field::placeholder {
+    @apply text-faint;
+  }
+
+  .ds-field:hover:not(:disabled) {
+    border-color: hsl(var(--border-strong) / 1);
+  }
+
+  .ds-field:focus-visible {
+    border-color: hsl(var(--neon) / 0.65);
+    box-shadow:
+      0 0 0 1px hsl(var(--background) / 1),
+      0 0 0 3px hsl(var(--neon) / 0.28),
+      0 0 24px -6px hsl(var(--blue) / 0.35);
+  }
+
+  .ds-field:disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
+
+  .form-control-base {
+    @apply ds-field;
+  }
+
+  /* 버튼 — 눌림·깊이 */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 text-sm font-semibold outline-none;
+    border-radius: var(--radius-sm);
+    padding: 10px 16px;
+    min-height: 40px;
+    border: 1px solid transparent;
+    transition:
+      transform var(--motion-fast) var(--motion-ease),
+      box-shadow var(--motion-fast) var(--motion-ease),
+      background-color var(--motion-base) var(--motion-ease),
+      border-color var(--motion-base) var(--motion-ease),
+      color var(--motion-base) var(--motion-ease);
+  }
+
+  .btn:focus-visible {
+    box-shadow:
+      0 0 0 2px hsl(var(--background) / 1),
+      0 0 0 4px hsl(var(--ring) / 0.35);
+  }
+
+  .btn:active:not(:disabled) {
+    transform: translateY(1px);
+    @include m.shadow-hud-pressed;
+  }
+
+  .btn:disabled {
+    @apply pointer-events-none opacity-45;
+  }
+
+  .btn-primary {
+    @apply btn border-transparent text-accent-fg;
+    background: linear-gradient(
+      135deg,
+      hsl(var(--accent) / 1) 0%,
+      hsl(var(--blue) / 0.92) 100%
+    );
+    box-shadow:
+      0 0 0 1px hsl(var(--neon) / 0.25),
+      0 0 24px -8px hsl(var(--neon) / 0.35);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--accent-hover) / 1) 0%,
+      hsl(var(--blue) / 0.85) 100%
+    );
+    box-shadow:
+      0 0 0 1px hsl(var(--neon) / 0.45),
+      0 0 32px -6px hsl(var(--neon) / 0.45);
+  }
+
+  .btn-secondary {
+    @apply btn text-foreground;
+    background: hsl(var(--surface) / 0.9);
+    border-color: hsl(var(--border) / 1);
+    box-shadow:
+      0 0 0 1px hsl(var(--blue) / 0.15),
+      inset 0 1px 0 0 hsl(var(--foreground) / 0.04);
+  }
+
+  .btn-secondary:hover:not(:disabled) {
+    background: hsl(var(--muted-bg) / 1);
+    border-color: hsl(var(--blue) / 0.45);
+    box-shadow:
+      0 0 20px -8px hsl(var(--blue) / 0.35),
+      inset 0 1px 0 0 hsl(var(--foreground) / 0.06);
+  }
+
+  .btn-ghost {
+    @apply btn bg-transparent text-muted;
+    border-color: transparent;
+    box-shadow: none;
+    min-height: auto;
+    padding: 6px 8px;
+  }
+
+  .btn-ghost:hover:not(:disabled) {
+    @apply bg-muted-bg/80 text-foreground;
+  }
+
+  .btn-primary-emphasis {
+    @apply btn-primary px-5 py-2.5;
+  }
+
+  /* 패널 / 카드 */
+  .ds-panel {
+    @include m.panel-frame;
+    position: relative;
+    padding: 16px;
+  }
+
+  .ds-panel--inset {
+    background: hsl(var(--surface-2) / 1);
+    @include m.shadow-hud-pressed;
+  }
+
+  .ds-panel--accent-notch {
+    @include m.slot-notch;
+  }
+
+  /* 탭 트랙 — 필터·섹션 내비 공통 */
+  .ds-tabtrack {
+    @apply flex flex-wrap gap-2 border-b border-border;
+    padding-bottom: 0;
+  }
+
+  .ds-tab {
+    @apply relative inline-flex items-center justify-center border font-semibold text-muted;
+    margin-bottom: -1px;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    border-color: transparent;
+    border-bottom: none;
+    padding: 10px 14px;
+    font-size: 0.8125rem;
+    letter-spacing: 0.02em;
+    transition:
+      color var(--motion-base) var(--motion-ease),
+      border-color var(--motion-base) var(--motion-ease),
+      background-color var(--motion-base) var(--motion-ease),
+      transform var(--motion-fast) var(--motion-ease);
+  }
+
+  .ds-tab:hover:not(:disabled):not([aria-current="true"]) {
+    @apply text-foreground;
+    background: hsl(var(--muted-bg) / 0.5);
+  }
+
+  .ds-tab[aria-current="true"],
+  .ds-tab[aria-current="location"],
+  .ds-tab[data-active="true"],
+  .ds-tab[data-state="active"] {
+    @apply text-foreground;
+    border-color: hsl(var(--border) / 1);
+    background: hsl(var(--surface) / 1);
+    border-bottom: 1px solid hsl(var(--surface) / 1);
+    box-shadow: 0 -1px 0 0 hsl(var(--accent) / 0.35);
+  }
+
+  .ds-tab:disabled {
+    @apply cursor-not-allowed opacity-40;
+  }
+
+  /* 스티키 탭 바 */
+  .ds-sticky-tabs {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+    margin-left: -4px;
+    margin-right: -4px;
+    padding: 0 4px 0;
+    border-bottom: 1px solid hsl(var(--border) / 1);
+    background: hsl(var(--background) / 0.92);
+    backdrop-filter: blur(8px);
+  }
+
+  /* 배지 */
+  .badge {
+    @apply inline-flex shrink-0 items-center font-semibold uppercase tracking-wider;
+    border-radius: var(--radius-sm);
+    padding: 4px 8px;
+    font-size: 10px;
+    line-height: 1.2;
+    border: 1px solid transparent;
+  }
+
+  .badge-mine {
+    border-color: hsl(var(--accent) / 0.35);
+    background: hsl(var(--accent-muted) / 1);
+    color: hsl(var(--accent) / 1);
+  }
+
+  .badge-recruiting {
+    color: hsl(var(--accent) / 1);
+    background: hsl(var(--accent-muted) / 0.55);
+    border-color: hsl(var(--accent) / 0.35);
+  }
+
+  .badge-closed {
+    @apply bg-muted-bg text-muted;
+    border-color: hsl(var(--border) / 0.85);
+  }
+
+  /* 상태 블록 */
+  .state-empty {
+    @apply text-sm text-muted;
+    border-radius: var(--radius-sm);
+    border: 1px dashed hsl(var(--border) / 1);
+    background: hsl(var(--surface-2) / 0.65);
+    padding: 24px 20px;
+  }
+
+  .state-error {
+    @apply text-sm text-danger;
+    border-radius: var(--radius-sm);
+    border: 1px solid hsl(var(--danger) / 0.35);
+    background: hsl(var(--danger-bg) / 1);
+    padding: 20px 18px;
+  }
+
+  .eyebrow {
+    @apply font-semibold uppercase tracking-[0.14em] text-faint;
+    font-size: 11px;
+  }
+
+  .rule {
+    @apply h-px w-full bg-border;
+  }
+
+  /* 팀 행 / 인터랙티브 카드 */
+  .team-row-shell {
+    @include m.panel-frame;
+    overflow: hidden;
+  }
+
+  .team-row-shell-interactive {
+    @include m.panel-frame;
+    cursor: pointer;
+    overflow: hidden;
+    transition:
+      border-color var(--motion-base) var(--motion-ease),
+      box-shadow var(--motion-base) var(--motion-ease),
+      transform var(--motion-fast) var(--motion-ease),
+      background-color var(--motion-base) var(--motion-ease);
+  }
+
+  .team-row-shell-interactive:hover {
+    border-color: hsl(var(--accent) / 0.35);
+    background: hsl(var(--muted-bg) / 0.35);
+    @include m.shadow-hud(0.9);
+  }
+
+  .team-row-shell-interactive:focus-visible {
+    @apply outline-none;
+    border-color: hsl(var(--accent) / 0.55);
+    box-shadow:
+      0 0 0 2px hsl(var(--background) / 1),
+      0 0 0 4px hsl(var(--ring) / 0.35);
+  }
+
+  .team-row-shell-interactive:active {
+    transform: translateY(1px);
+    @include m.shadow-hud-pressed;
+  }
+
+  /* 스켈레톤 — 게이지형 */
+  .ds-skeleton {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    background: hsl(var(--muted-bg) / 1);
+    border: 1px solid hsl(var(--border) / 0.45);
+  }
+
+  .ds-skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(var(--surface) / 0.55),
+      transparent
+    );
+    transform: translateX(-100%);
+    animation: ds-shimmer 1.15s ease-in-out infinite;
+  }
+
+  @keyframes ds-shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  /* 해커톤 리스트 행 */
+  .ds-hack-row {
+    display: block;
+    border-bottom: 1px solid hsl(var(--border) / 1);
+    padding: 20px 4px;
+    transition:
+      background-color var(--motion-base) var(--motion-ease),
+      transform var(--motion-fast) var(--motion-ease);
+  }
+
+  .ds-hack-row:first-child {
+    padding-top: 8px;
+  }
+
+  .ds-hack-row:hover {
+    background: hsl(var(--muted-bg) / 0.45);
+  }
+
+  .ds-hack-row:active {
+    transform: translateY(1px);
+  }
+
+  /* 테이블 HUD */
+  .ds-table-wrap {
+    overflow-x: auto;
+    border-radius: var(--radius-sm);
+    border: 1px solid hsl(var(--border) / 1);
+    background: hsl(var(--surface) / 1);
+    @include m.shadow-hud(0.55);
+  }
+
+  .ds-table-wrap table {
+    @apply w-full min-w-[520px] text-left text-sm;
+  }
+
+  .ds-table-wrap thead {
+    @apply border-b border-border bg-muted-bg text-xs uppercase tracking-wide text-faint;
+  }
+
+  .ds-table-wrap th {
+    @apply px-4 py-3 font-semibold;
+  }
+
+  .ds-table-wrap tbody tr {
+    @apply border-b border-border last:border-b-0;
+    transition: background-color var(--motion-base) var(--motion-ease);
+  }
+
+  .ds-table-wrap tbody tr:hover {
+    background: hsl(var(--muted-bg) / 0.35);
+  }
+
+  .ds-table-wrap td {
+    @apply px-4 py-3;
+  }
+
+  /* 드롭다운 패널 */
+  .ds-select-panel {
+    z-index: var(--z-dropdown);
+    margin-top: 8px;
+    max-height: 15rem;
+    overflow: auto;
+    border-radius: var(--radius-sm);
+    border: 1px solid hsl(var(--border) / 1);
+    background: hsl(var(--surface) / 1);
+    padding: 4px;
+    @include m.shadow-hud(0.95);
+  }
+
+  .ds-select-option {
+    @apply flex w-full cursor-pointer items-center text-left text-sm text-foreground;
+    border-radius: 2px;
+    padding: 10px 12px;
+    transition:
+      background-color var(--motion-fast) var(--motion-ease),
+      color var(--motion-fast) var(--motion-ease);
+  }
+
+  .ds-select-option:hover:not(:disabled),
+  .ds-select-option:focus-visible {
+    @apply bg-muted-bg/90 outline-none;
+  }
+
+  .ds-select-option[aria-selected="true"] {
+    @apply bg-accent-muted font-medium text-accent;
+  }
+
+  .ds-select-option:disabled {
+    @apply cursor-not-allowed opacity-45;
+  }
+
+  /* 페이지 쉘 */
+  .ds-page {
+    @apply mx-auto min-h-screen max-w-content pb-20 pt-8 sm:px-8 lg:px-12 lg:pt-10;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .ds-page-narrow {
+    max-width: 42rem;
+  }
+
+  /* 스와이퍼 커스텀 */
+  .ds-swiper-nav {
+    @apply flex items-center justify-end gap-2;
+  }
+
+  .ds-swiper-btn {
+    @apply btn-secondary min-h-[36px] px-3 py-1.5 text-xs;
+    min-width: 36px;
+  }
+
+  .ds-swiper-fraction {
+    @apply font-mono text-xs text-muted;
+    min-width: 3.5rem;
+    text-align: center;
+  }
+
+  .ds-swiper-progress {
+    height: 4px;
+    border-radius: 2px;
+    background: hsl(var(--muted-bg) / 1);
+    border: 1px solid hsl(var(--border) / 0.8);
+    overflow: hidden;
+  }
+
+  .ds-swiper-progress-bar {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(
+      90deg,
+      hsl(var(--accent) / 0.35),
+      hsl(var(--accent) / 0.85)
+    );
+    transition: width var(--motion-base) var(--motion-ease);
+  }
+
+  /* 인디터미넌트 로드 바 — 스피너 대신 HUD 진행 느낌 */
+  .ds-loadbar {
+    height: 4px;
+    border-radius: 2px;
+    overflow: hidden;
+    border: 1px solid hsl(var(--border) / 1);
+    background: hsl(var(--muted-bg) / 1);
+  }
+
+  .ds-loadbar__fill {
+    height: 100%;
+    width: 38%;
+    background: linear-gradient(
+      90deg,
+      hsl(var(--accent) / 0.25),
+      hsl(var(--accent) / 0.75)
+    );
+    animation: ds-loadbar-slide 1.05s ease-in-out infinite;
+  }
+
+  @keyframes ds-loadbar-slide {
+    0% {
+      transform: translateX(-120%);
+    }
+    100% {
+      transform: translateX(320%);
+    }
+  }
+
+  /* 랜딩 — 카드 / 그리드 / 구분선 */
+  .cyber-card {
+    box-shadow:
+      0 0 0 1px hsl(var(--border) / 0.55),
+      0 0 36px -14px hsl(var(--neon) / 0.12);
+    transition:
+      box-shadow var(--motion-base) var(--motion-ease),
+      border-color var(--motion-base) var(--motion-ease);
+  }
+
+  .cyber-card:hover {
+    border-color: hsl(var(--blue) / 0.4);
+    box-shadow:
+      0 0 0 1px hsl(var(--blue) / 0.35),
+      0 0 48px -12px hsl(var(--neon) / 0.22);
+  }
+
+  .cyber-card--accent::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      hsl(var(--neon) / 0.95),
+      hsl(var(--blue) / 0.9)
+    );
+    pointer-events: none;
+  }
+
+  .landing-section {
+    scroll-margin-top: 5.5rem;
+  }
+
+  .landing-grid-bg {
+    pointer-events: none;
+    background-image:
+      linear-gradient(hsl(var(--border) / 0.4) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border) / 0.4) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(
+      ellipse 85% 55% at 50% -10%,
+      black 0%,
+      transparent 72%
+    );
+  }
+
+  html[data-theme="light"] .landing-grid-bg {
+    opacity: 0.32 !important;
+    background-image:
+      linear-gradient(hsl(var(--border) / 0.55) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border) / 0.55) 1px, transparent 1px);
+  }
+
+  /* Swiper — 인접 슬라이드가 카드 밖으로 비치지 않도록 */
+  .swiper-viewport {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .swiper.swiper-contained {
+    overflow: hidden !important;
+    width: 100% !important;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .swiper.swiper-contained .swiper-wrapper {
+    box-sizing: border-box;
+  }
+
+  .swiper.swiper-contained .swiper-slide {
+    box-sizing: border-box;
+    overflow: hidden;
+    width: 100% !important;
+    max-width: 100%;
+    flex-shrink: 0;
+  }
+
+  .cyber-divider {
+    height: 1px;
+    width: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(var(--neon) / 0.28),
+      hsl(var(--blue) / 0.4),
+      transparent
+    );
+  }
+
+  .btn-ghost-neon {
+    @apply btn border text-foreground;
+    border-color: hsl(var(--neon) / 0.45);
+    background: transparent;
+    box-shadow: 0 0 20px -10px hsl(var(--neon) / 0.35);
+  }
+
+  .btn-ghost-neon:hover:not(:disabled) {
+    background: hsl(var(--neon) / 0.08);
+    border-color: hsl(var(--neon) / 0.65);
+    box-shadow: 0 0 28px -8px hsl(var(--neon) / 0.4);
+  }
+}

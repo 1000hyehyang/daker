@@ -117,6 +117,11 @@ export function SubmitForm({
           {error}
         </div>
       )}
+      {pending !== null && (
+        <div className="ds-loadbar max-w-measure" aria-hidden>
+          <div className="ds-loadbar__fill" />
+        </div>
+      )}
       <div className="flex flex-wrap gap-3">
         <button
           type="button"

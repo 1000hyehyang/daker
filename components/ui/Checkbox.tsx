@@ -34,9 +34,10 @@ export function Checkbox({
       <span
         aria-hidden
         className={cn(
-          "flex h-[1.125rem] w-[1.125rem] shrink-0 items-center justify-center rounded-[var(--radius-sm)] border border-border bg-elevated shadow-sm transition",
+          "flex h-[1.125rem] w-[1.125rem] shrink-0 items-center justify-center rounded-[2px] border border-border bg-surface",
+          "shadow-[0_1px_0_0_rgb(0_0_0/0.06)] transition",
           "peer-hover:border-border-strong peer-hover:bg-muted-bg/50",
-          "peer-active:bg-muted-bg/70",
+          "peer-active:translate-y-px peer-active:shadow-[inset_0_1px_0_0_rgb(0_0_0/0.08)]",
           "peer-focus-visible:border-accent peer-focus-visible:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-ring/30",
           "peer-disabled:cursor-not-allowed peer-disabled:opacity-50 peer-disabled:hover:border-border",
           "peer-checked:border-accent peer-checked:bg-accent",

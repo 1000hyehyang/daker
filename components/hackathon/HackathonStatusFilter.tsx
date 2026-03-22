@@ -19,11 +19,7 @@ export function HackathonStatusFilter({
   disabled,
 }: HackathonStatusFilterProps) {
   return (
-    <div
-      className="flex flex-wrap gap-6 border-b border-border"
-      role="group"
-      aria-label={hackathonUiAria.statusFilter}
-    >
+    <div className="ds-tabtrack gap-1" role="group" aria-label={hackathonUiAria.statusFilter}>
       {HACKATHON_FILTER_OPTIONS.map((opt) => {
         const active = value === opt.value;
         return (
@@ -31,12 +27,9 @@ export function HackathonStatusFilter({
             key={opt.value}
             type="button"
             disabled={disabled}
+            data-state={active ? "active" : "inactive"}
             onClick={() => onChange(opt.value)}
-            className={`-mb-px border-b-2 pb-3 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-40 ${
-              active
-                ? "border-accent text-foreground"
-                : "border-transparent text-muted hover:border-border-strong hover:text-foreground"
-            }`}
+            className="ds-tab disabled:cursor-not-allowed disabled:opacity-40"
           >
             {opt.label}
           </button>
