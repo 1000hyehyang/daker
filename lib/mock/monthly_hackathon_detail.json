@@ -1,0 +1,57 @@
+{
+  "slug": "monthly-vibe-coding-2026-02",
+  "titleFallback": "월간 해커톤 : 바이브 코딩 개선 AI 아이디어 공모전 (2026.02)",
+  "sections": {
+    "overview": {
+      "summary": "바이브 코딩 워크플로우를 개선하는 AI 아이디어를 공모합니다. 기획·프롬프트·UX 관점의 제안을 환영합니다.",
+      "teamPolicy": {
+        "allowSolo": true,
+        "maxTeamSize": 5
+      }
+    },
+    "info": {
+      "notice": [
+        "제출 형식 및 일정은 해커톤 공지를 따릅니다.",
+        "문의는 FAQ 링크를 이용해 주세요."
+      ],
+      "links": {
+        "rules": "https://example.com/public/rules/vibe202602",
+        "faq": "https://example.com/public/faq/vibe202602"
+      }
+    },
+    "eval": {
+      "metricName": "IdeaScore",
+      "description": "아이디어 독창성·실현 가능성·사용자 가치를 종합 평가합니다."
+    },
+    "schedule": {
+      "timezone": "Asia/Seoul",
+      "milestones": [
+        { "name": "접수 시작", "at": "2026-02-01T10:00:00+09:00" },
+        { "name": "제출 마감", "at": "2026-03-03T10:00:00+09:00" },
+        { "name": "대회 종료", "at": "2026-03-09T10:00:00+09:00" }
+      ]
+    },
+    "prize": {
+      "items": [
+        { "place": "1st", "amountKRW": 1000000 },
+        { "place": "2nd", "amountKRW": 500000 }
+      ]
+    },
+    "teams": {
+      "campEnabled": true,
+      "listUrl": "/camp?hackathon=monthly-vibe-coding-2026-02"
+    },
+    "submit": {
+      "allowedArtifactTypes": ["url", "pdf"],
+      "submissionUrl": "/hackathons/monthly-vibe-coding-2026-02#submit",
+      "guide": [
+        "기획서와 데모 링크를 제출합니다.",
+        "최종 제출 후 리더보드 반영까지 수 분 걸릴 수 있습니다."
+      ]
+    },
+    "leaderboard": {
+      "publicLeaderboardUrl": "/hackathons/monthly-vibe-coding-2026-02#leaderboard",
+      "note": "진행 중 리더보드는 변동될 수 있습니다."
+    }
+  }
+}
